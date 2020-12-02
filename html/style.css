@@ -1,0 +1,39 @@
+*{
+  font-size: medium;
+  /* font-weight: 100; */
+}.container {
+  width: 70%;
+  margin: 100px 50px 0 120px;
+  box-shadow: 4px 3px 8px 1px #969696;
+ }
+
+.box {
+  display: flex;
+  border: 1px solid;
+     
+}
+
+.box_column{
+     width: 80%;
+ }
+
+.con{
+     width: 50%;
+     margin-left: 10px;
+ }
+
+.fa {
+  width: 30%;
+  position: relative;
+  top: 10px;
+  left: 60%;
+}
+
+.box_column--content{
+margin-left: 8px;
+font-weight: 100;
+}
+
+.box_column--grey{
+  background: #F0F0F0;
+}
