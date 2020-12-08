@@ -117,3 +117,22 @@ html {
 .right-top {
     margin-left: 350px;
 }
+
+.parent{
+    display: flex;
+}
+.c1,.c2{
+    width: 50%;
+}
+
+.c2{
+padding-left: 65%;
+}
+
+.c1{
+    padding-left: 5%;
+}
+
+.Total{
+    font-weight: 200;
+}
