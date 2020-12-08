@@ -6,7 +6,7 @@
 html {
     background-image: url(../images/background.jpg);
     background-size: cover;
-    /* overflow: cover; */
+    overflow: cover;
 }
 
 .container {
@@ -116,4 +116,123 @@ html {
 
 .right-top {
     margin-left: 350px;
+}
+
+.parent{
+    display: flex;
+}
+.c1,.c2{
+    width: 50%;
+}
+
+.c2{
+padding-left: 65%;
+}
+
+.c1{
+    padding-left: 5%;
+}
+
+.Total{
+    font-weight: 200;
+}
+
+@media all and (min-width: 992px) {
+
+    .container {
+        padding-left: 100px;
+        padding-right: 100px;
+        padding-top: 2%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navigation.l {
+        flex-grow: 0.3;
+        padding: 7px;
+        text-align: left;
+    }
+
+    .navigation.r {
+        align-content: flex-start;
+        flex-flow: row;
+        flex-grow: 0.7;
+        padding: 7px;
+        background-color: lightgrey;
+    }
+}
+
+@media all and (max-width:992px) {
+   .container {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 2%;
+    }
+}
+
+@media all and (max-width: 600px) {
+
+    .co-navigation {
+        flex-direction: column;
+    }
+
+    .right-top {
+        margin-left: 7px;
+    }
+
+    .l {
+        flex-grow: 0.3;
+        padding: 7px;
+        text-align: left;
+        width: 100%;
+    }
+
+    .r {
+        align-content: flex-start;
+        flex-flow: row;
+        flex-grow: 0.7;
+        padding: 7px;
+        background-color: lightgrey;
+        width: 100%;
+    }
+
+}
+
+@media all and (min-width: 768px) and (max-width:992px) {
+
+    .navigation.l {
+        flex-grow: 0.3;
+        padding: 7px;
+        text-align: left;
+        width: 100%;
+    }
+
+    .navigation.r {
+        align-content: flex-start;
+        flex-flow: row;
+        flex-grow: 0.7;
+        padding: 7px;
+        background-color: lightgrey;
+        width: 100%;
+    }
+
+}
+
+@media all and (max-width: 400px) {
+
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-top: 2%;
+    }
+    .img {
+        width: 100%;
+        height: auto;
+    }
+    .t-navigation {
+        flex-flow: column;
+    }
+    .right-top {
+        margin-left: 7px;
+    }
 }
