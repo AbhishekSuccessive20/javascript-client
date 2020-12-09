@@ -1,0 +1,32 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "no-empty": 0,
+    "no-irregular-whitespace": 0,
+    "indent": [
+      2,
+      2
+    ],
+    "react/jsx-indent": [
+      "error",
+      2
+    ],
+    "import/prefer-default-export": "off",
+    "no-unused-vars": "off"
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "classes": true
+    }
+  }
+}
