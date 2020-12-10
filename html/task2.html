@@ -1,140 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/task2.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Document</title>
-
-</head>
-<body>
-    <div class="container">
-        <div class="box">
-            <h4 class="box_con">Checkout</h4>
-            <p class="box_con">Shipping  / <strong> Payment Method </strong> &nbsp; / &nbsp; Confirmation</p>
-            <i class="fa fa-window-close" aria-hidden="true"></i>
-        </div>
-        <div class="box">
-            <div class="box_column">
-                <h4 class="box_column--content">Wallet</h4>
-                <hr>
-                <div class="column_img">
-                    <div class="column_img--card">
-                        <img src="images/cards/discover.png" alt="discover" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                    <div class="decor">
-                        <img src="images/cards/mastercard.png" alt="mastercard.png" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                    <div class="column_img--card">
-                        <img src="images/cards/visa.png" alt="visa.png" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                </div>
-                <h4 class="box_column--content"> New Card </h4>
-                <hr>
-                <div class="column_form">
-                    <input type="text" id="name" placeholder="Name on Card"><br><br>
-                    <input type="number" id="num" placeholder="XXXX-XXXX-XXXX-XXXX"><br><br>
-                    <input type="date" id="exp" placeholder="MM/YY">
-                    <input type="number" id="cvv" placeholder="CVV"><br><br>
-                    <input type="submit" id="button"  value="CONTINUE">
-                </div>
-            </div>
-            <div class=" box_column1 ">
-                <div class="t-navigation">
-                    <img class="ico" src="./images/products/mobile-holder.jpg" alt="">
-                    <div class="txt"><b>&nbsp;&nbsp; Mobile Holder </b>
-                        <div class="right-top">
-                            <font size="3"><b>$10.00</b></font>
-                        </div>
-                        <font size="2">&nbsp;&nbsp;Black</font> <br>
-                        <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                        <br>
-                    </div>
-                </div>
-                <hr>
+<html>
     
-                <div class="t-navigation"><img class="ico" src="./images/products/rado.jpg" alt="">
-                    <div class="txt"><b>&nbsp;&nbsp;Rado Watch</b>
-                        <div class="right-top">
-                            <font size="3"><b>$10.00</b></font>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/cssreset-min.css">
+    <link rel="stylesheet" type="text/css" href="css/task2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+        integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
+        crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="parent">
+        <div class="navigation">
+            <ul>
+                <li class="checkout"><a href="#"><b>Checkout</b></a> </li>
+            </ul>
+            <li style="flex-grow: 0.5"></li>
+            <div class="hide-breadcrumb">
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Shipping</a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <b>Payment Method</b>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">Confirmation </a>
+                    </li>
+                </ul>
+            </div>
+
+            <li style="flex-grow: 3"></li>
+            <ul>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-window-close fa-2x" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="navigation">
+            <div class="co-navigation">
+                <div class="l">
+                    <ul class="left">
+                        <li style="text-align: left; padding: 7px;">Wallet</li>
+                        <hr style="outline-width: thin;">
+                        <div class="c-navigation">
+                            <li>
+                                <a href="#"><img class="img" src="./images/cards/discover.png" alt="">
+                                    <span>Ending with 8899</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"><img class="img" src="./images/cards/mastercard.png" alt="">
+                                    <span>Ending with 8899</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"><img class="img" src="./images/cards/visa.png" alt="">
+                                    <span>Ending with 8899</span>
+                                </a>
+                            </li>
                         </div>
-                        <font size="2">&nbsp;&nbsp;Black</font><br>
-                        <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                        <br>
-                    </div>
-                </div>
-                <hr>
 
-                <div class="t-navigation"><img class="ico" src="./images/products/usb-c-2-micro.jpeg"
-                    alt="">
-                <div class="txt"><b>&nbsp;&nbsp;C type to Micro Convertor</b>
-                    <div class="right-top">
-                        <font size="3"><b>$10.00</b></font>
-                    </div>
-                    <font size="2">&nbsp;&nbsp;Black</font><br>
-                    <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                    <br>
-                </div>
-            </div>
-            <hr>
+                        <li style="text-align: left; padding: 7px;">New Card</li>
+                        <hr style="outline-width: thin;">
 
-            <div class="t-navigation"><img class="ico" src="./images/products/hard-case.jpg" alt="">
-                <div class="txt"><b>&nbsp;&nbsp;Mobile Case</b>
-                    <div class="right-top">
-                        <font size="3"><b>$10.00</b></font>
-                    </div>
-                    <font size="2">&nbsp;&nbsp;Black</font><br>
-                    <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                    <br><br><br><br><br>
+                        <div class="n-navigation">
+                            <form action="">
+                                <div class="input">
+                                    <input class="input-space" type="text" placeholder="  Name on Card" />
+                                    <input class="input-space" type="text" placeholder="  xxxx-xxxx-xxxx-xxxx" />
+                                    <div class="input-short">
+                                        <input class="short-button" type="text"
+                                            placeholder="  MM/YY" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input class="short-button" type="text" placeholder="  CVV" />
+                                    </div>
+                                    <input type="submit" value="  CONTINUE  " class="button-success"><br>
+                                </div>
+                            </form>
+                        </div>
+                    </ul>
                 </div>
-            </div>
-            <hr>
+                <div class="r">
+                    <ul class="right">
+                        <li>
+                            <ul class="pro-navigation">
+                                <li>
+                                    <a>
+                                        <div class="t-navigation">
+                                            <img class="ico" src="./images/products/mobile-holder.jpg" alt="">
+                                            <div class="txt"><b>&nbsp;&nbsp; Mobile Holder </b>
+                                                <div class="right-top">
+                                                    <font size="3"><b>$10.00</b></font>
+                                                </div>
+                                                <font size="2">&nbsp;&nbsp;Black</font> <br>
+                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <div class="t-navigation"><img class="ico" src="./images/products/rado.jpg"
+                                                alt="">
+                                            <div class="txt"><b>&nbsp;&nbsp;Rado Watch</b>
+                                                <div class="right-top">
+                                                    <font size="3"><b>$10.00</b></font>
+                                                </div>
+                                                <font size="2">&nbsp;&nbsp;Black</font><br>
+                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <div class="t-navigation"><img class="ico"
+                                                src="./images/products/usb-c-2-micro.jpeg" alt="">
+                                            <div class="txt"><b>&nbsp;&nbsp;C type to Micro Convertor</b>
+                                                <div class="right-top">
+                                                    <font size="3"><b>$10.00</b></font>
+                                                </div>
+                                                <font size="2">&nbsp;&nbsp;Black</font><br>
+                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <div class="t-navigation"><img class="ico" src="./images/products/hard-case.jpg"
+                                                alt="">
+                                            <div class="txt"><b>&nbsp;&nbsp;Mobile Case</b>
+                                                <div class="right-top">
+                                                    <font size="3"><b>$10.00</b></font>
+                                                </div>
+                                                <font size="2">&nbsp;&nbsp;Black</font><br>
+                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                                                <br><br><br><br><br>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <div class="summary">
+                                            <div>
+                                                Sub Total<br>Shipping<br>Taxes<br>
+                                            </div>
+                                            <div class="price">
+                                                $ 100.00 <br> $ 10.00 <br> $ 5.00
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <div class="summary">
+                                            <div>
+                                                <b>Total</b><br>
+                                            </div>
+                                            <div class="price">
+                                                <b>$ 115.00</b><br>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
 
-            <div><a style="text-align: left; display: flexbox;"> <div class= "parent">
-                <div class="c1">
-                    Sub Total
                 </div>
-                <div class="c2">
-                $100.00
-                </div>
-            </div> 
-            <br>
-            <div class="parent">
-                <div class="c1">
-                Shipping
             </div>
-            <div class="c2">
-                $10.00
-            </div>
-        </div><br>
-        <div class="parent">
-            <div class="c1">
-                Taxes
-            </div>
-            <div class="c2">
-                  $5.00
-                </div>
-            </a>
+
+
         </div>
-        <hr>
 
-        <div class="parent Total">
-            <div class="c1">
-
-                <strong>Total</strong>
-            </div>
-            <div class="c2">
-                <strong>$115.0</strong>
-            </div>
-
-        </div>
-            </div>
-        </div>
     </div>
+
 </body>
+
 </html>
