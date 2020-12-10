@@ -1,0 +1,138 @@
+* {
+    font-size: medium;
+    /* font-weight: 100; */
+}
+
+html {
+    background-image: url(../images/background.jpg);
+    background-size: cover;
+    /* overflow: cover; */
+}
+
+.container {
+    width: 95%;
+    height: 60%;
+    margin: 30px 0px 20px 40px;
+    box-shadow: 4px 3px 8px 1px #969696;
+    background-color: white;
+}
+
+.box {
+    display: flex;
+    border: 0.1px solid;
+    /* justify-content: flex-end; */
+
+}
+
+.box_column {
+    width: 60%;
+}
+
+.box_con {
+    width: 35%;
+    margin-left: 8px;
+}
+
+.fa {
+    width: 30%;
+    position: relative;
+    top: 10px;
+    left: 26%;
+}
+
+.box_column--content {
+    margin-left: 8px;
+    font-weight: 100;
+}
+
+.box_column1--content {
+    margin-left: 8px;
+    font-weight: 100;
+}
+
+
+.box_column1 {
+    width: 40%;
+    background: #F0F0F0;
+}
+
+.column_img {
+    display: flex;
+}
+
+.column_img--card {
+    margin: 8px 20px 20px 20px;
+}
+
+.decor {
+    text-decoration: none;
+    border: #CCC thin solid;
+    padding: 4px;
+}
+
+.decor:hover {
+    background: #CCC;
+}
+
+.decor:hover img {
+    visibility: display;
+}
+
+.column_form {
+    margin: 10px 0 30px 150px;
+}
+
+#num,
+#name,
+#button {
+    width: 310px;
+}
+
+#cvv,
+#exp {
+    width: 150px;
+}
+
+#button {
+    background-color: #33CC99;
+    padding: 10px;
+    border: 0px;
+    color: honeydew;
+}
+
+.t-navigation {
+    /* -webkit-flex-flow: column wrap; */
+    /* background-color: lavender; */
+    margin: 0;
+    display: flex;
+}
+
+.ico {
+    width: 50px;
+    height: 50px;
+    margin: 4px;
+    border: 2px solid;
+}
+
+.right-top {
+    margin-left: 350px;
+}
+
+.parent{
+    display: flex;
+}
+.c1,.c2{
+    width: 50%;
+}
+
+.c2{
+padding-left: 65%;
+}
+
+.c1{
+    padding-left: 5%;
+}
+
+.Total{
+    font-weight: 200;
+}
