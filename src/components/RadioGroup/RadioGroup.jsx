@@ -1,35 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
+import { color } from './style';
 
 const RadioGroup = (props) => {
   const {
     value,
     options,
     onChange,
+    onBlur,
     error,
   } = props;
 
   return (
-    <>
-      {options.map((val) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <div key={val.label}>
-          <input type="radio" onChange={onChange} checked={val.value === value} value={val.value} />
-          {val.label}
-        </div>
-      ))}
-    </>
+    <div>
+      <div>
+        {options.map((val) => (
+          <div key={val.label}>
+            <input type="radio" onBlur={onBlur} onChange={onChange} checked={val.value === value} value={val.value} />
+            {val.label}
+          </div>
+        ))}
+      </div>
+      {error ? <p style={color}>{error}</p> : ''}
+    </div>
   );
 };
+
 RadioGroup.propTypes = {
   options: PropTypes.arrayOf(PropTypes.objectOf),
   value: PropTypes.string.isRequired,
   error: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
 };
 RadioGroup.defaultProps = {
   error: '',
   options: [],
+  onBlur: () => {},
 };
 
 export default RadioGroup;
