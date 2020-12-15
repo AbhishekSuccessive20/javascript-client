@@ -1,20 +1,16 @@
-/* eslint-disable react/jsx-boolean-value */
-/* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
+import React from 'react';
 import { TextField } from '../../components';
 
-class TextFieldDemo extends Component {
-  render() {
-    return (
-      <>
-        <TextField disabled={true} />
-        <br />
-        <TextField value="Accessible" />
-        <br />
-        <TextField error="error field" />
-        <br />
-      </>
-    );
-  }
+function TextFieldDemo() {
+  return (
+    <>
+      <TextField disabled />
+      <br />
+      <TextField value="Accessible" />
+      <br />
+      <TextField error="101" />
+      <br />
+    </>
+  );
 }
 export default TextFieldDemo;
