@@ -17,10 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:c": "react-scripts test --coverage",
-    "eject": "react-scripts eject",
-    "lint": "eslint src",
-    "lint:fix": "npm run lint --fix",
-    "commit": "npx git-cz"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -44,11 +41,5 @@
     "commitizen": "^4.2.2",
     "eslint-config-airbnb": "^18.2.1",
     "husky": "^4.3.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm test",
-      "pre-push": "npm run lint && npm test"
-    }
   }
 }

@@ -6,8 +6,6 @@ export const disabledField = {
 
 const validField = {
   ...disabledField,
-  border: '4px solid brown',
-  'border-width': '2px',
 };
 
 export const color = {
@@ -16,8 +14,6 @@ export const color = {
 
 export const errorField = {
   ...validField,
-  border: '4px solid red',
-  'border-width': '2px',
 };
 
 export default validField;
