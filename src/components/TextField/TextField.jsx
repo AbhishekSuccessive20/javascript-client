@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import validField, { disabledField, errorField, color } from './style';
+import validField, { disabledField, color } from './style';
 
 function TextField(props) {
   const {

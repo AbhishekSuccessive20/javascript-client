@@ -28,7 +28,7 @@ SelectField.propTypes = {
   onChange: PropTypes.func.isRequired,
   defaultText: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.object),
-  onBlur: PropTypes.arrayOf(PropTypes.object),
+  onBlur: PropTypes.func,
 };
 
 SelectField.defaultProps = {
