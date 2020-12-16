@@ -1,42 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+    
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/task2.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Document</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/task2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+        integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
+        crossorigin="anonymous" />
 </head>
+
 <body>
-    <div class="container">
-        <div class="box">
-            <h4 class="box_con">Checkout</h4>
-            <p class="box_con">Shipping  / <strong> Payment Method </strong> &nbsp; / &nbsp; Confirmation</p>
-            <i class="fa fa-window-close" aria-hidden="true"></i>
+    <div class="parent">
+        <div class="navigation">
+            <h4 class="checkout"><a href="#"><b>Checkout</b></a></h4>
+            <div class="hide-breadcrumb">
+                <p class="breadcrumb">
+                        <a href="#">Shipping</a>
+                        <a href="#">
+                            <b>Payment Method</b>
+                        </a>
+                        <a href="#">Confirmation </a>
+            </div>
+                    <a href="#">
+                        <i class="fas fa-window-close fa-2x" aria-hidden="true"></i>
+            </a></p>
         </div>
-        <div class="box">
-            <div class="box_column">
-                <h4 class="box_column--content">Wallet</h4>
-                <hr>
-                <div class="column_img">
-                    <div class="column_img--card">
-                        <img src="images/cards/discover.png" alt="discover" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                    <div class="decor">
-                        <img src="images/cards/mastercard.png" alt="mastercard.png" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                    <div class="column_img--card">
-                        <img src="images/cards/visa.png" alt="visa.png" width="200" height="120">
-                        <h5>Ending with 8899</h5>
-                    </div>
-                </div>
-                <h4 class="box_column--content"> New Card </h4>
-                <hr>
-                <div class="column_form">
+        <div class="navigation">
+            <div class="co-navigation">
+                <div class="l">
+                        <h4 style="text-align: left; padding: 7px;">Wallet</h4>
+                        <hr style="outline-width: thin;">
+                        <div class="c-navigation">
+                                <a href="#"><img class="img" src="./images/cards/discover.png" alt="">
+                                    <span>Ending with 8899</span>
+                            </a>
+                                <a href="#"><img class="img" src="./images/cards/mastercard.png" alt="">
+                                    <span>Ending with 8899</span>
+                                </a>
+                                <a href="#"><img class="img" src="./images/cards/visa.png" alt="">
+                                    <span>Ending with 8899</span>
+                                </a>
+                        </div>
+
+                        <h4 style="text-align: left; padding: 7px;">New Card</h4>
+                        <hr style="outline-width: thin;">
+                  <div class="column_form">
                     <input type="text" id="name" placeholder="Name on Card"><br><br>
                     <input type="number" id="num" placeholder="XXXX-XXXX-XXXX-XXXX"><br><br>
                     <input type="date" id="exp" placeholder="MM/YY">
@@ -94,8 +102,6 @@
                 </div>
             </div>
             <hr>
-
-
             <div><a style="text-align: left; display: flexbox;"> <div class= "parent">
                 <div class="c1">
                     Sub Total
@@ -133,9 +139,10 @@
                 <strong>$115.0</strong>
             </div>
 
+          </div>
         </div>
-            </div>
-        </div>
+       </div>
     </div>
+
 </body>
 </html>
