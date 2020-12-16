@@ -3,7 +3,13 @@ import { TextFieldDemo } from './pages';
 
 function App() {
   return (
-    <div>
+    <div style={
+      {
+        'border-style': 'solid',
+        'border-width': '2px',
+        padding: '10px',
+      }
+    }
       <TextFieldDemo />
     </div>
   );

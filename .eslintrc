@@ -9,10 +9,18 @@
     "airbnb"
   ],
   "rules": {
-    "indent": [2, 2],
-    "linebreak-style": 0,
-    "react/jsx-indent": ["error", 2],
-    "import/prefer-default-export": "off"
+    "no-empty": 0,
+    "no-irregular-whitespace": 0,
+    "indent": [
+      2,
+      2
+    ],
+    "react/jsx-indent": [
+      "error",
+      2
+    ],
+    "import/prefer-default-export": "off",
+    "no-unused-vars": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,
