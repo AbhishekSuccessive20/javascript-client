@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import validField, { disabledField, errorField, color } from './style';
 
 function TextField(props) {
-  const { value, disabled, error } = props;
+  const {
+    value, error, onChange, disabled,
+  } = props;
   if (error) {
     return (
       <span>
-        <b>An input with errors</b>
-        <br />
-        <br />
-        <input type="text" style={errorField} value={error} />
-        <br />
-        <span style={color}>Could not be greater than</span>
+        <input type="text" style={errorField} value={error} onChange={onChange} />
         <br />
       </span>
     );
@@ -20,34 +17,33 @@ function TextField(props) {
   if (disabled) {
     return (
       <span>
-        <b>This is a Disabled Input</b>
-        <br />
-        <br />
-        <input type="text" style={disabledField} value="Disabled Input" disabled={disabled} />
+        <input type="text" style={disabledField} value={value} disabled={disabled} />
         <br />
       </span>
     );
   }
   return (
     <span>
-      <b>A Valid Input</b>
-      <br />
-      <br />
-      <input type="text" style={validField} defaultValue={value} />
+      <input
+        type="text"
+        style={validField}
+        defaultValue={value}
+        onChange={onChange}
+      />
       <br />
     </span>
   );
 }
 
 TextField.propTypes = {
-  value: PropTypes.string,
-  disabled: PropTypes.bool,
+  value: PropTypes.string.isRequired,
   error: PropTypes.string,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
 };
 TextField.defaultProps = {
-  value: 'Accessible',
-  disabled: false,
   error: '',
+  disabled: false,
 };
 
 export default TextField;

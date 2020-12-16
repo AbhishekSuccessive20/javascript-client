@@ -1,16 +1,32 @@
 import React from 'react';
-import { TextField } from '../../components';
+import { TextField, Slider } from '../../components';
 
-function TextFieldDemo() {
+function TextFieldDemo(props) {
   return (
     <>
-      <TextField disabled />
+      <Slider
+        banner={
+          [
+            'load-balancer.png',
+            'full-stack-web-development.jpg',
+            'js.jpg',
+            'dns-server.png',
+            'cloud.jpg',
+          ]
+        }
+        height={150}
+        duration={1000}
+        random={false}
+      />
       <br />
-      <TextField value="Accessible" />
+      <TextField disabled value="Disabled Input" onChange={() => {}} />
       <br />
-      <TextField error="101" />
+      <TextField value="Accessible" onChange={() => {}} />
+      <br />
+      <TextField value="" error="101" onChange={() => {}} />
       <br />
     </>
   );
 }
+
 export default TextFieldDemo;
