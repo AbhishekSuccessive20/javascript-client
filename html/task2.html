@@ -44,99 +44,104 @@
 
                         <h4 style="text-align: left; padding: 7px;">New Card</h4>
                         <hr style="outline-width: thin;">
-
-                        <div class="n-navigation">
-                            <form action="">
-                                <div class="input">
-                                    <input class="input-space" type="text" placeholder="  Name on Card" />
-                                    <input class="input-space" type="text" placeholder="  xxxx-xxxx-xxxx-xxxx" />
-                                    <div class="input-short">
-                                        <input class="short-button" type="text"
-                                            placeholder="  MM/YY" />&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input class="short-button" type="text" placeholder="  CVV" />
-                                    </div>
-                                    <input type="submit" value="  CONTINUE  " class="button-success"><br>
-                                </div>
-                            </form>
-                        </div>
-                    </ul>
-                </div>
-                <div class="r">
-                                <a>
-                                    <div class="t-navigation">
-                                            <img class="ico" src="./images/products/mobile-holder.jpg" alt="">
-                                            <div class="txt"><b>&nbsp;&nbsp; Mobile Holder </b>
-                                                <div class="right-top">
-                                                    <font size="3"><b>$10.00</b></font>
-                                                </div>
-                                                <font size="2">&nbsp;&nbsp;Black</font> <br>
-                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                                                <br>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a>
-                                        <div class="t-navigation"><img class="ico" src="./images/products/rado.jpg"
-                                                alt="">
-                                            <div class="txt"><b>&nbsp;&nbsp;Rado Watch</b>
-                                                <div class="right-top">
-                                                    <font size="3"><b>$10.00</b></font>
-                                                </div>
-                                                <font size="2">&nbsp;&nbsp;Black</font><br>
-                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                                                <br>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a>
-                                        <div class="t-navigation"><img class="ico"
-                                                src="./images/products/usb-c-2-micro.jpeg" alt="">
-                                            <div class="txt"><b>&nbsp;&nbsp;C type to Micro Convertor</b>
-                                                <div class="right-top">
-                                                    <font size="3"><b>$10.00</b></font>
-                                                </div>
-                                                <font size="2">&nbsp;&nbsp;Black</font><br>
-                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                                                <br>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a>
-                                        <div class="t-navigation"><img class="ico" src="./images/products/hard-case.jpg"
-                                                alt="">
-                                            <div class="txt"><b>&nbsp;&nbsp;Mobile Case</b>
-                                                <div class="right-top">
-                                                    <font size="3"><b>$10.00</b></font>
-                                                </div>
-                                                <font size="2">&nbsp;&nbsp;Black</font><br>
-                                                <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
-                                                <br><br><br><br><br>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a>
-                                        <div class="summary">
-                                            <div>
-                                                Sub Total<br>Shipping<br>Taxes<br>
-                                            </div>
-                                            <div class="price">
-                                                $ 100.00 <br> $ 10.00 <br> $ 5.00
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a>
-                                        <div class="summary">
-                                            <div>
-                                                <b>Total</b><br>
-                                            </div>
-                                            <div class="price">
-                                                <b>$ 115.00</b><br>
-                                            </div>
-                                        </div>
-                                    </a>
+                  <div class="column_form">
+                    <input type="text" id="name" placeholder="Name on Card"><br><br>
+                    <input type="number" id="num" placeholder="XXXX-XXXX-XXXX-XXXX"><br><br>
+                    <input type="date" id="exp" placeholder="MM/YY">
+                    <input type="number" id="cvv" placeholder="CVV"><br><br>
+                    <input type="submit" id="button"  value="CONTINUE">
                 </div>
             </div>
+            <div class=" box_column1 ">
+                <div class="t-navigation">
+                    <img class="ico" src="./images/products/mobile-holder.jpg" alt="">
+                    <div class="txt"><b>&nbsp;&nbsp; Mobile Holder </b>
+                        <div class="right-top">
+                            <font size="3"><b>$10.00</b></font>
+                        </div>
+                        <font size="2">&nbsp;&nbsp;Black</font> <br>
+                        <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                        <br>
+                    </div>
+                </div>
+                <hr>
+    
+                <div class="t-navigation"><img class="ico" src="./images/products/rado.jpg" alt="">
+                    <div class="txt"><b>&nbsp;&nbsp;Rado Watch</b>
+                        <div class="right-top">
+                            <font size="3"><b>$10.00</b></font>
+                        </div>
+                        <font size="2">&nbsp;&nbsp;Black</font><br>
+                        <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                        <br>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="t-navigation"><img class="ico" src="./images/products/usb-c-2-micro.jpeg"
+                    alt="">
+                <div class="txt"><b>&nbsp;&nbsp;C type to Micro Convertor</b>
+                    <div class="right-top">
+                        <font size="3"><b>$10.00</b></font>
+                    </div>
+                    <font size="2">&nbsp;&nbsp;Black</font><br>
+                    <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                    <br>
+                </div>
+            </div>
+            <hr>
+
+            <div class="t-navigation"><img class="ico" src="./images/products/hard-case.jpg" alt="">
+                <div class="txt"><b>&nbsp;&nbsp;Mobile Case</b>
+                    <div class="right-top">
+                        <font size="3"><b>$10.00</b></font>
+                    </div>
+                    <font size="2">&nbsp;&nbsp;Black</font><br>
+                    <font size="2"><b>&nbsp;&nbsp;Quantity: 1</b></font>
+                    <br><br><br><br><br>
+                </div>
+            </div>
+            <hr>
+            <div><a style="text-align: left; display: flexbox;"> <div class= "parent">
+                <div class="c1">
+                    Sub Total
+                </div>
+                <div class="c2">
+                $100.00
+                </div>
+            </div> 
+            <br>
+            <div class="parent">
+                <div class="c1">
+                Shipping
+            </div>
+            <div class="c2">
+                $10.00
+            </div>
+        </div><br>
+        <div class="parent">
+            <div class="c1">
+                Taxes
+            </div>
+            <div class="c2">
+                  $5.00
+                </div>
+            </a>
         </div>
+        <hr>
+
+        <div class="parent Total">
+            <div class="c1">
+
+                <strong>Total</strong>
+            </div>
+            <div class="c2">
+                <strong>$115.0</strong>
+            </div>
+
+          </div>
+        </div>
+       </div>
     </div>
 
 </body>
