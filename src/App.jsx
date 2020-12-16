@@ -10,7 +10,6 @@ function App() {
         padding: '10px',
       }
     }
-    >
       <TextFieldDemo />
     </div>
   );
