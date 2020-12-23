@@ -1,13 +1,14 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { Trainee } from './pages';
-import theme from './theme';
+import { CssBaseline } from '@material-ui/core';
+import { Trainee, Login } from './pages';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Trainee />
-    </ThemeProvider>
+    <>
+      <CssBaseline />
+      {/* <Trainee /> */}
+      <Login />
+    </>
   );
 }
 
