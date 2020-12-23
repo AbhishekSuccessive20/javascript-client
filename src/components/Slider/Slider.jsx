@@ -1,5 +1,3 @@
-/* no-extraneous-dependencies */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getRandomNumber, getNextRoundRobin } from '../../lib/utils/math';

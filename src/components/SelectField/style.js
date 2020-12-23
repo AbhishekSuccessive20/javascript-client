@@ -4,3 +4,7 @@ export const style = {
   borderRadius: '5px',
   border: '1px solid lightGray',
 };
+
+export const color = {
+  color: 'red',
+};
