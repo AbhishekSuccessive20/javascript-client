@@ -27,6 +27,8 @@ class Trainee extends Component {
     const { open } = this.state;
     return (
       <>
+        <Navbar />
+        <br />
         <Button
           variant="outlined"
           color="primary"

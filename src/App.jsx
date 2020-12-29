@@ -6,8 +6,8 @@ function App() {
   return (
     <>
       <CssBaseline />
-      {/* <Trainee /> */}
-      <Login />
+      <Trainee />
+      { /* <Login /> */}
     </>
   );
 }
