@@ -21,9 +21,9 @@ function TextFieldDemo(props) {
       <br />
       <TextField disabled value="Disabled Input" onChange={() => {}} />
       <br />
-      <TextField value="Accessible" onChange={() => {}} />
+      <TextField textVal value="Accessible" onChange={() => {}} />
       <br />
-      <TextField value="" error="101" onChange={() => {}} />
+      <TextField textVal value="" error="101" onChange={() => {}} />
       <br />
     </>
   );

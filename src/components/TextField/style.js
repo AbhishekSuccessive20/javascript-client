@@ -14,6 +14,7 @@ export const color = {
 
 export const errorField = {
   ...validField,
+  border: 'solid red',
 };
 
 export default validField;
