@@ -27,7 +27,7 @@ export default function Navbar() {
           <Typography variant="h6" className={classes.title}>
             Trainee Portal
           </Typography>
-          <Link component={RouterLink} to="/" color="inherit">
+          <Link component={RouterLink} to="/trainee" color="inherit">
             <Button color="inherit">TRAINEE</Button>
           </Link>
           <Link component={RouterLink} to="/text-field" color="inherit">
