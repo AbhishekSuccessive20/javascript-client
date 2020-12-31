@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { AddDialogue } from './components';
+import { Table } from '../../components';
 import trainee from './data/trainee';
 
 class TraineeList extends Component {
@@ -49,14 +50,33 @@ class TraineeList extends Component {
     return (
       <>
         <br />
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          ADD TRAINEELIST
-        </Button>
-        {this.renderTrainees()}
+        <div style={{ marginRight: '2%' }} align="right">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={this.handleClickOpen}
+          >
+            ADD TRAINEELIST
+          </Button>
+        </div>
+        <Table
+          id=""
+          data={trainee}
+          columns={
+            [
+              {
+                field: 'name',
+                label: 'Name',
+                align: 'center',
+              },
+              {
+                field: 'email',
+                label: 'Email Address',
+              },
+            ]
+          }
+        />
+        { this.renderTrainees() }
         <AddDialogue open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
       </>
     );
