@@ -19,6 +19,8 @@ import {
   Visibility, VisibilityOff, Email, Person,
 } from '@material-ui/icons';
 
+import { SnackBarContext } from '../../../../contexts';
+
 class AddDialogue extends Component {
     schema = yup.object().shape({
       name: yup
@@ -134,7 +136,7 @@ class AddDialogue extends Component {
       return this.hasErrors();
     }
 
-    onSubmit = () => {
+    onSubmit = (event, value) => {
       const { onSubmit } = this.props;
       const {
         name,
@@ -143,6 +145,7 @@ class AddDialogue extends Component {
       } = this.state;
       // eslint-disable-next-line no-console
       console.log({ name, email, password });
+      value('Successfully Added!', 'success');
       onSubmit({ name, email, password });
     }
 
@@ -161,128 +164,132 @@ class AddDialogue extends Component {
         showMatchPassword,
       } = this.state;
       return (
-        <>
-          <Dialog open={open} onClose={onClose} maxWidth="lg">
-            <DialogTitle>Add Trainee</DialogTitle>
-            <DialogContent>
-              <DialogContentText>Enter your trainee details</DialogContentText>
-              <TextField
-                label="Name *"
-                value={name}
-                variant="outlined"
-                onChange={this.handleValue('name')}
-                onBlur={() => this.isTouched('name')}
-                helperText={this.getError('name')}
-                error={this.isValid('name')}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Person />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <br />
-              <br />
-              <TextField
-                label="Email Address"
-                value={email}
-                variant="outlined"
-                onChange={this.handleValue('email')}
-                onBlur={() => this.isTouched('email')}
-                helperText={this.getError('email')}
-                error={this.isValid('email')}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <br />
-              <br />
-              <Grid container>
-                <Grid item xl={6} xs={6}>
+        <SnackBarContext.Consumer>
+          {
+            (value) => (
+              <Dialog open={open} onClose={onClose} maxWidth="lg">
+                <DialogTitle>Add Trainee</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Enter your trainee details</DialogContentText>
                   <TextField
-                    label="Password"
-                    value={password}
-                    type={showPassword ? 'text' : 'password'}
+                    label="Name *"
+                    value={name}
                     variant="outlined"
-                    onChange={this.handleValue('password')}
-                    onBlur={() => this.isTouched('password')}
-                    helperText={this.getError('password')}
-                    error={this.isValid('password')}
-                    style={{ marginRight: '5%' }}
+                    onChange={this.handleValue('name')}
+                    onBlur={() => this.isTouched('name')}
+                    helperText={this.getError('name')}
+                    error={this.isValid('name')}
+                    fullWidth
                     InputLabelProps={{
                       shrink: true,
                     }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <IconButton onClick={this.handleClickShowPassword}>
-                            {showPassword ? <Visibility /> : <VisibilityOff /> }
-                          </IconButton>
+                          <Person />
                         </InputAdornment>
                       ),
                     }}
                   />
-                </Grid>
-                <Grid item xl={6} xs={6}>
+                  <br />
+                  <br />
                   <TextField
-                    label="Confirm Password"
-                    value={confirmPswd}
-                    type={showMatchPassword ? 'text' : 'password'}
+                    label="Email Address"
+                    value={email}
                     variant="outlined"
-                    onChange={this.handleValue('confirmPswd')}
-                    onBlur={() => this.isTouched('confirmPswd')}
-                    helperText={this.getError('confirmPswd')}
-                    error={this.isValid('confirmPswd')}
+                    onChange={this.handleValue('email')}
+                    onBlur={() => this.isTouched('email')}
+                    helperText={this.getError('email')}
+                    error={this.isValid('email')}
+                    fullWidth
                     InputLabelProps={{
                       shrink: true,
                     }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <IconButton onClick={this.handleClickShowMatchPassword}>
-                            {showMatchPassword ? (
-                              <Visibility />
-                            ) : (
-                              <VisibilityOff />
-                            )}
-                          </IconButton>
+                          <Email />
                         </InputAdornment>
                       ),
                     }}
                   />
-                </Grid>
-              </Grid>
-              <br />
-              <br />
-            </DialogContent>
-            <DialogActions>
-              <Button color="primary" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.onSubmit}
-                disabled={!(this.handleButtonError())}
-              >
-                Submit
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
+                  <br />
+                  <br />
+                  <Grid container>
+                    <Grid item xl={6} xs={6}>
+                      <TextField
+                        label="Password"
+                        value={password}
+                        type={showPassword ? 'text' : 'password'}
+                        variant="outlined"
+                        onChange={this.handleValue('password')}
+                        onBlur={() => this.isTouched('password')}
+                        helperText={this.getError('password')}
+                        error={this.isValid('password')}
+                        style={{ marginRight: '5%' }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <IconButton onClick={this.handleClickShowPassword}>
+                                {showPassword ? <Visibility /> : <VisibilityOff /> }
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xl={6} xs={6}>
+                      <TextField
+                        label="Confirm Password"
+                        value={confirmPswd}
+                        type={showMatchPassword ? 'text' : 'password'}
+                        variant="outlined"
+                        onChange={this.handleValue('confirmPswd')}
+                        onBlur={() => this.isTouched('confirmPswd')}
+                        helperText={this.getError('confirmPswd')}
+                        error={this.isValid('confirmPswd')}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <IconButton onClick={this.handleClickShowMatchPassword}>
+                                {showMatchPassword ? (
+                                  <Visibility />
+                                ) : (
+                                  <VisibilityOff />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                  <br />
+                  <br />
+                </DialogContent>
+                <DialogActions>
+                  <Button color="primary" onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(event) => this.onSubmit(event, value)}
+                    disabled={!(this.handleButtonError())}
+                  >
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )
+          }
+        </SnackBarContext.Consumer>
       );
     }
 }

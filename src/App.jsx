@@ -10,24 +10,29 @@ import {
 
 import { AuthRoute, PrivateRoute } from './routes';
 
+import { SnackBarProvider } from './contexts';
+
 function App() {
   return (
     <>
-      <CssBaseline />
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/trainee" />
-          </Route>
-          <PrivateRoute path="/trainee" component={Trainee} />
-          <AuthRoute path="/login" component={Login} />
-          <PrivateRoute path="/text-field" component={TextFieldDemo} />
-          <PrivateRoute path="/input-demo" component={InputDemo} />
-          <PrivateRoute path="/children-demo" component={ChildrenDemo} />
-          <PrivateRoute component={NoMatch} />
-        </Switch>
-      </Router>
+      <SnackBarProvider>
+        <CssBaseline />
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/trainee" />
+            </Route>
+            <PrivateRoute path="/trainee" component={Trainee} />
+            <AuthRoute path="/login" component={Login} />
+            <PrivateRoute path="/text-field" component={TextFieldDemo} />
+            <PrivateRoute path="/input-demo" component={InputDemo} />
+            <PrivateRoute path="/children-demo" component={ChildrenDemo} />
+            <PrivateRoute component={NoMatch} />
+          </Switch>
+        </Router>
+      </SnackBarProvider>
     </>
   );
 }
+
 export default App;
