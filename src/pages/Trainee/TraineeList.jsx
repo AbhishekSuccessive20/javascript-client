@@ -77,6 +77,7 @@ class TraineeList extends Component {
           }
         />
         { this.renderTrainees() }
+        
         <AddDialogue open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
       </>
     );
