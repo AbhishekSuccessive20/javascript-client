@@ -99,9 +99,9 @@ class InputDemo extends Component {
     return (
       <>
         <div>
-          <p><b>Name:</b></p>
+          <p><b>Name*</b></p>
           <TextField value={name} error={this.getError('name')} onChange={this.handleNameChange} onBlur={() => this.isTouched('name')} />
-          <p><b>Select the game you play?</b></p>
+          <p><b>Select the game you play?*</b></p>
           <SelectField
             value=""
             error={this.getError('sport')}
@@ -114,7 +114,7 @@ class InputDemo extends Component {
             {
               sport === cricketStr ? (
                 <div>
-                  <h3>What you do?</h3>
+                  <h3>What you do?*</h3>
                   <RadioGroup
                     value={cricket}
                     options={cricketOptions}
@@ -131,7 +131,7 @@ class InputDemo extends Component {
             {
               sport === footballStr ? (
                 <div>
-                  <h3>What you do?</h3>
+                  <h3>What you do?*</h3>
                   <RadioGroup
                     value={football}
                     options={footballOptions}
