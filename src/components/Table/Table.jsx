@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Table as TableUI, TableBody, TableCell, TableSortLabel, TableHead, TableRow, Paper,
+  Table as TableUI,
+  TableBody,
+  TableCell,
+  TableSortLabel,
+  TablePagination,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
 } from '@material-ui/core';
 
 const styles = (theme) => ({
@@ -53,32 +61,42 @@ class Table extends Component {
   )
 
   renderRow = (data, col) => {
+    const { onSelect } = this.props;
     let value = data[col.field];
     if (col.format) {
       value = col.format(value);
     }
 
     return (
-      <TableCell align={(col.align) ? col.align : 'left'}>
+      <TableCell align={(col.align) ? col.align : 'left'} onClick={(event) => onSelect(event, data.id)}>
         {value}
       </TableCell>
     );
   }
 
   renderRows = (data, columns) => {
-    const { classes, onSelect } = this.props;
+    const { classes, actions } = this.props;
     return (
-      <TableRow className={classes.row} hover onClick={(event) => onSelect(event, data.id)}>
+      <TableRow className={classes.row} hover>
         {
           columns.map((col) => this.renderRow(data, col))
         }
+        <TableCell>
+          {
+            actions.map((action) => (
+              <IconButton onClick={(event) => action.handler(event, data)}>
+                {action.icon}
+              </IconButton>
+            ))
+          }
+        </TableCell>
       </TableRow>
     );
   }
 
   render() {
     const {
-      classes, data, columns, id, order, orderBy, onSelect, onSort,
+      classes, data, columns, id, count, rowsPerPage, page, onChangePage,
     } = this.props;
     return (
       <Paper className={classes.root} key={id}>
@@ -92,6 +110,26 @@ class Table extends Component {
             }
           </TableBody>
         </TableUI>
+        {
+          count
+            ? (
+              <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={count}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={onChangePage}
+              />
+            )
+            : ''
+        }
       </Paper>
     );
   }
@@ -113,6 +151,11 @@ Table.propTypes = {
   order: PropTypes.string,
   onSort: PropTypes.func,
   onSelect: PropTypes.func,
+  actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  page: PropTypes.number,
+  count: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number,
+  onChangePage: PropTypes.func,
 };
 
 Table.defaultProps = {
@@ -121,6 +164,9 @@ Table.defaultProps = {
   orderBy: '',
   onSort: () => {},
   onSelect: () => {},
+  onChangePage: () => {},
+  page: 0,
+  rowsPerPage: 100,
 };
 
 export default withStyles(styles)(Table);
