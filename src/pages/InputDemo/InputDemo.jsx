@@ -50,7 +50,7 @@ class InputDemo extends Component {
       this.setState({
         football: e.target.value,
       });
-    } else { }
+    }
   };
 
   getError = (field) => {
