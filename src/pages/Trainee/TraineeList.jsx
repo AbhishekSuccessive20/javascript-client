@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
 import { Table } from '../../components';
 import trainee from './data/trainee';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
