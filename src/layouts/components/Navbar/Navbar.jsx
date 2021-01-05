@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const handleLogout = () => {
+  localStorage.removeItem('token');
+};
+
 export default function Navbar() {
   const classes = useStyles();
   return (
@@ -39,7 +43,7 @@ export default function Navbar() {
           <Link component={RouterLink} to="/children-demo" color="inherit">
             <Button color="inherit">CHILDREN DEMO</Button>
           </Link>
-          <Button color="inherit" className={classes.margin}>Login</Button>
+          <Button component={RouterLink} to="/login" color="inherit" className={classes.margin} onClick={handleLogout}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
     </div>
