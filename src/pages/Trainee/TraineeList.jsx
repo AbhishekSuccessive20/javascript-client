@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { AddDialogue } from './components';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Table } from '../../components';
 import trainee from './data/trainee';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
+import { AddDialogue, EditDialog, RemoveDialog } from './components';
 
 class TraineeList extends Component {
   constructor(props) {
@@ -14,6 +16,10 @@ class TraineeList extends Component {
       open: false,
       order: props.order,
       orderBy: props.orderBy,
+      deleteOpen: false,
+      editOpen: false,
+      traineeData: {},
+      page: 0,
     };
   }
 
@@ -24,6 +30,28 @@ class TraineeList extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  handleDeleteClose = () => {
+    this.setState({ deleteOpen: false });
+  }
+
+  handleEditClose = () => {
+    this.setState({ editOpen: false });
+  }
+
+  handleEditDialogOpen = (event, data) => {
+    event.preventDefault();
+    this.setState({ editOpen: true, traineeData: data });
+  }
+
+  handleRemoveDialogOpen = (event, data) => {
+    event.preventDefault();
+    this.setState({ deleteOpen: true, traineeData: data });
+  };
+
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  }
 
   handleSubmit = (temp) => {
     this.setState({ open: false });
@@ -70,7 +98,9 @@ class TraineeList extends Component {
   }
 
   render() {
-    const { open, order, orderBy } = this.state;
+    const {
+      open, order, orderBy, traineeData, page, deleteOpen, editOpen,
+    } = this.state;
     return (
       <>
         <br />
@@ -105,14 +135,43 @@ class TraineeList extends Component {
               },
             ]
           }
+
+          actions={[
+            {
+              icon: <EditIcon />,
+              handler: this.handleEditDialogOpen,
+            },
+            {
+              icon: <DeleteIcon />,
+              handler: this.handleRemoveDialogOpen,
+            },
+          ]}
+          
           order={order}
           orderBy={orderBy}
           onSort={this.handleSort}
           onSelect={this.handleSelect}
+          count={100}
+          rowsPerPage={5}
+          page={page}
+          onChangePage={this.handleChangePage}
         />
-        { this.renderTrainees() }
-        
-        <AddDialogue open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
+        {this.renderTrainees()}
+        <AddDialogue
+          open={open}
+          onClose={this.handleClose}
+          onSubmit={this.handleSubmit}
+        />
+        <RemoveDialog
+          deleteOpen={deleteOpen}
+          onClose={this.handleDeleteClose}
+          details={traineeData}
+        />
+        <EditDialog
+          editOpen={editOpen}
+          onClose={this.handleEditClose}
+          details={traineeData}
+        />
       </>
     );
   }
@@ -121,8 +180,14 @@ class TraineeList extends Component {
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
+  order: PropTypes.string,
+  orderBy: PropTypes.string,
+};
+
+TraineeList.defaultProps = {
+  orderBy: '',
+  order: 'asc',
+
 };
 
 export default TraineeList;
