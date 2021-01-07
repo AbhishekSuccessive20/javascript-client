@@ -99,7 +99,7 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token', response.data.data);
+        localStorage.setItem('token');
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
@@ -114,7 +114,7 @@ class Login extends Component {
           },
           progress: false,
         });
-        openSnackBar(err.response.data.message, 'error');
+        openSnackBar('Error While Logging in!', 'error');
       });
   }
 
