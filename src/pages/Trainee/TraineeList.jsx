@@ -135,6 +135,7 @@ class TraineeList extends Component {
               },
             ]
           }
+
           actions={[
             {
               icon: <EditIcon />,
@@ -145,6 +146,7 @@ class TraineeList extends Component {
               handler: this.handleRemoveDialogOpen,
             },
           ]}
+          
           order={order}
           orderBy={orderBy}
           onSort={this.handleSort}
@@ -185,6 +187,7 @@ TraineeList.propTypes = {
 TraineeList.defaultProps = {
   orderBy: '',
   order: 'asc',
+
 };
 
 export default TraineeList;

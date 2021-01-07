@@ -51,7 +51,7 @@ class Table extends Component {
       </TableCell>
     );
   }
-
+  
   renderColumns = (columns) => (
     <TableRow>
       {
