@@ -5,12 +5,15 @@ import Button from '@material-ui/core/Button';
 import { AddDialogue } from './components';
 import { Table } from '../../components';
 import trainee from './data/trainee';
+import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 
 class TraineeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
+      order: props.order,
+      orderBy: props.orderBy,
     };
   }
 
@@ -45,8 +48,29 @@ class TraineeList extends Component {
     </ul>
   )
 
+  handleSort = (field) => {
+    const { order, orderBy } = this.state;
+    if (orderBy !== field) {
+      this.setState({
+        order: 'asc',
+        orderBy: field,
+      });
+    } else {
+      this.setState({
+        order: (order) === 'asc' ? 'desc' : 'asc',
+        orderBy: field,
+      });
+    }
+  }
+
+  handleSelect = (event, id) => {
+    const { history, match } = this.props;
+    event.preventDefault();
+    history.push(`${match.path}/${id}`);
+  }
+
   render() {
-    const { open } = this.state;
+    const { open, order, orderBy } = this.state;
     return (
       <>
         <br />
@@ -60,21 +84,31 @@ class TraineeList extends Component {
           </Button>
         </div>
         <Table
-          id=""
+          id="id"
           data={trainee}
           columns={
             [
               {
                 field: 'name',
                 label: 'Name',
-                align: 'center',
               },
               {
                 field: 'email',
                 label: 'Email Address',
+                format: (value) => value && value.toUpperCase(),
+              },
+              {
+                field: 'createdAt',
+                label: 'Date',
+                align: 'right',
+                format: getDateFormatted,
               },
             ]
           }
+          order={order}
+          orderBy={orderBy}
+          onSort={this.handleSort}
+          onSelect={this.handleSelect}
         />
         { this.renderTrainees() }
         
@@ -86,6 +120,9 @@ class TraineeList extends Component {
 
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  order: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
 };
 
 export default TraineeList;

@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NoMatch } from '..';
 
 import trainee from './data/trainee';
+import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -34,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '2%',
   },
 }));
-
-const getDateFormatted = (createdAt) => (
-  moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')
-);
 
 const check = (item, classes) => (
   <div>

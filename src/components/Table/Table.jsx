@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Table as TableUI, TableBody, TableCell, TableHead, TableRow, Paper,
+  Table as TableUI, TableBody, TableCell, TableSortLabel, TableHead, TableRow, Paper,
 } from '@material-ui/core';
 
 const styles = (theme) => ({
@@ -14,6 +14,12 @@ const styles = (theme) => ({
   table: {
     minWidth: 650,
   },
+  row: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+    cursor: 'pointer',
+  },
 });
 
 class Table extends Component {
@@ -22,10 +28,21 @@ class Table extends Component {
     this.state = {};
   }
 
-  renderColumn = (item) => (
-    <TableCell style={{ color: 'grey' }} align={(item.align) ? item.align : 'left'}>{(item.label) ? item.label : item.field}</TableCell>
-  )
-
+  renderColumn = (item) => {
+    const { order, orderBy, onSort } = this.props;
+    return (
+      <TableCell style={{ color: 'grey' }} align={(item.align) ? item.align : 'left'}>
+        <TableSortLabel
+          active={orderBy === item.field}
+          direction={order}
+          onClick={() => onSort(item.field)}
+          align={(item.align) === 'right' ? 'left' : 'right'}
+        >
+          {item.label ? item.label : item.field}
+        </TableSortLabel>
+      </TableCell>
+    );
+  }
   renderColumns = (columns) => (
     <TableRow>
       {
@@ -34,33 +51,43 @@ class Table extends Component {
     </TableRow>
   )
 
-  renderRow = (data, col) => (
-    <TableCell align={(col.align) ? col.align : 'left'}>
-      {data[col.field]}
-    </TableCell>
-  )
+  renderRow = (data, col) => {
+    let value = data[col.field];
+    if (col.format) {
+      value = col.format(value);
+    }
 
-  renderRows = (data, columns) => (
-    <TableRow>
-      {
-        columns.map((col) => this.renderRow(data, col))
-      }
-    </TableRow>
-  )
+    return (
+      <TableCell align={(col.align) ? col.align : 'left'}>
+        {value}
+      </TableCell>
+    );
+  }
+
+  renderRows = (data, columns) => {
+    const { classes, onSelect } = this.props;
+    return (
+      <TableRow className={classes.row} hover onClick={(event) => onSelect(event, data.id)}>
+        {
+          columns.map((col) => this.renderRow(data, col))
+        }
+      </TableRow>
+    );
+  }
 
   render() {
     const {
-      classes, data, columns, id,
+      classes, data, columns, id, order, orderBy, onSelect, onSort,
     } = this.props;
     return (
-      <Paper className={classes.root}>
+      <Paper className={classes.root} key={id}>
         <TableUI className={classes.table} aria-label="simple table">
           <TableHead>
             { this.renderColumns(columns) }
           </TableHead>
           <TableBody>
             {
-              data.map((row) => this.renderRows(row, columns))
+              data.map((row) => this.renderRows(row, columns, classes))
             }
           </TableBody>
         </TableUI>
@@ -77,13 +104,22 @@ Table.propTypes = {
       field: PropTypes.string.isRequired,
       label: PropTypes.string,
       align: PropTypes.string,
+      format: PropTypes.func,
     },
   )).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  orderBy: PropTypes.string,
+  order: PropTypes.string,
+  onSort: PropTypes.func,
+  onSelect: PropTypes.func,
 };
 
 Table.defaultProps = {
   id: '',
+  order: 'asc',
+  orderBy: '',
+  onSort: () => {},
+  onSelect: () => {},
 };
 
 export default withStyles(styles)(Table);
