@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 
 import { Email, Person } from '@material-ui/icons';
+import { SnackBarContext } from '../../../../contexts';
 
 class EditDialog extends Component {
   schema = yup.object().shape({
@@ -119,7 +120,7 @@ class EditDialog extends Component {
   onConsole = () => {
     const { name, email } = this.state;
     // eslint-disable-next-line no-console
-    console.log('Editted Item', { name, email });
+    console.log('Edited Item', { name, email });    
     this.setState({
       buttonEnable: false,
       name: '',
@@ -131,76 +132,83 @@ class EditDialog extends Component {
     });
   }
 
-  onSubmit = () => {
+  onSubmit = (event, value) => {
     const { onClose } = this.props;
     this.onConsole();
+    value('Successfully Edited!', 'success');
     onClose();
   }
 
   render() {
     const { editOpen, onClose, details } = this.props;
     return (
-      <Dialog open={editOpen} onClose={this.handleClose}>
-        <DialogTitle>Edit Trainee</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter your trainee details</DialogContentText>
-          <TextField
-            label="Name"
-            defaultValue={details.name}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleNameValue}
-            onBlur={() => this.isTouched('name')}
-            helperText={this.getError('name')}
-            error={this.isValid('name')}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Person />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Email Address"
-            defaultValue={details.email}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleEmailValue}
-            onBlur={() => this.isTouched('email')}
-            helperText={this.getError('email')}
-            error={this.isValid('email')}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button color="primary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.onSubmit}
-            disabled={!(this.handleButtonError())}
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <SnackBarContext.Consumer>
+        {
+          (value) => (
+            <Dialog open={editOpen} onClose={this.handleClose}>
+              <DialogTitle>Edit Trainee</DialogTitle>
+              <DialogContent>
+                <DialogContentText>Enter your trainee details</DialogContentText>
+                <TextField
+                  label="Name"
+                  defaultValue={details.name}
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.handleNameValue}
+                  onBlur={() => this.isTouched('name')}
+                  helperText={this.getError('name')}
+                  error={this.isValid('name')}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Person />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Email Address"
+                  defaultValue={details.email}
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.handleEmailValue}
+                  onBlur={() => this.isTouched('email')}
+                  helperText={this.getError('email')}
+                  error={this.isValid('email')}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Email />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button color="primary" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(event) => this.onSubmit(event, value)}
+                  disabled={!(this.handleButtonError())}
+                >
+                  Submit
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )
+        }
+      </SnackBarContext.Consumer>
     );
   }
 }
