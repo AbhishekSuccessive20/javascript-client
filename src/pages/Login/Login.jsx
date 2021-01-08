@@ -64,16 +64,6 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      email: '',
-      password: '',
-      showPassword: false,
-      touched: {
-        email: false,
-        password: false,
-      },
-      progress: false,
-    };
     this.baseSate = this.state();
   }
 
