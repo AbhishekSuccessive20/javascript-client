@@ -74,6 +74,7 @@ class Login extends Component {
       },
       progress: false,
     };
+    this.baseSate = this.state();
   }
 
   handleClickShowPassword = () => {
@@ -99,7 +100,7 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token');
+        localStorage.setItem('token',response.data.token);
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
@@ -115,6 +116,7 @@ class Login extends Component {
           progress: false,
         });
         openSnackBar('Error While Logging in!', 'error');
+        this.setState(this.baseState);
       });
   }
 
