@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import {
   Table as TableUI,
   TableBody,
@@ -14,7 +13,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 
-import hoc from '../HOC/index';
+import { withLoaderAndMessage } from '../HOC';
 
 const styles = (theme) => ({
   root: {
@@ -33,96 +32,138 @@ const styles = (theme) => ({
   },
 });
 
-class Table extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    const {
-      id, columns, classes, order, orderBy, onSort, onSelect,
-      actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
-    } = this.props;
+function Table(props) {
+  const renderColumn = (item) => {
+    const { order, orderBy, onSort } = props;
     return (
-      <TableUI component={Paper} className={classes.tableContainer}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              {
-                columns.length && columns.map(({
-                  align, field, lable,
-                }) => (
-                  <TableCell
-                    align={align}
-                    className={classes.tableHeader}
-                  >
-                    <TableSortLabel
-                      active={orderBy === field}
-                      direction={orderBy === field ? order : 'asc'}
-                      onClick={onSort(field)}
-                    >
-                      {lable}
-                    </TableSortLabel>
-                  </TableCell>
-                ))
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : data
-            ).map((item) => (
-              <TableRow className={classes.tableRow} key={item[id]}>
-                {
-                  columns && columns.length && columns.map(({ align, field, format }) => (
-                    <TableCell onClick={(event) => onSelect(event, item.name)} align={align} component="th" scope="row" order={order} ordery={orderBy}>
-                      {format ? format(item[field]) : item[field]}
-                    </TableCell>
-                  ))
-                }
-                {actions && actions.length && actions.map(({ icon, handler }) => (
-                  <TableRow>
-                    <IconButton onClick={() => handler(item)}>
-                      {icon}
-                    </IconButton>
-                  </TableRow>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-          <TablePagination
-            rowsPerPageOptions={0}
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-          />
-        </Table>
-      </TableUI>
+      <TableCell style={{ color: 'grey' }} align={(item.align) ? item.align : 'left'}>
+        <TableSortLabel
+          active={orderBy === item.field}
+          direction={order}
+          onClick={() => onSort(item.field)}
+          align={(item.align) === 'right' ? 'left' : 'right'}
+        >
+          {item.label ? item.label : item.field}
+        </TableSortLabel>
+      </TableCell>
     );
-  }
+  };
+
+  const renderColumns = (columns) => (
+    <TableRow>
+      {
+        columns.map((item) => renderColumn(item))
+      }
+    </TableRow>
+  );
+
+  const renderRow = (data, col) => {
+    const { onSelect } = props;
+    let value = data[col.field];
+    if (col.format) {
+      value = col.format(value);
+    }
+
+    return (
+      <TableCell align={(col.align) ? col.align : 'left'} onClick={(event) => onSelect(event, data.id)}>
+        {value}
+      </TableCell>
+    );
+  };
+
+  const renderRows = (data, columns) => {
+    const { classes, actions } = props;
+    return (
+      <TableRow className={classes.row} hover>
+        {
+          columns.map((col) => renderRow(data, col))
+        }
+        <TableCell>
+          {
+            actions.map((action) => (
+              <IconButton onClick={(event) => action.handler(event, data)}>
+                {action.icon}
+              </IconButton>
+            ))
+          }
+        </TableCell>
+      </TableRow>
+    );
+  };
+
+  const {
+    classes, data, columns, id, count, rowsPerPage, page, onChangePage,
+  } = props;
+
+  return (
+    <Paper className={classes.root}>
+      <TableUI key={id} className={classes.table} aria-label="simple table">
+        <TableHead>
+          { renderColumns(columns) }
+        </TableHead>
+        <TableBody>
+          {
+            data
+              .map((row) => renderRows(row, columns))
+          }
+        </TableBody>
+      </TableUI>
+      {
+        count
+          ? (
+            <TablePagination
+              rowsPerPageOptions={[]}
+              component="div"
+              count={count}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              backIconButtonProps={{
+                'aria-label': 'Previous Page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'Next Page',
+              }}
+              onChangePage={onChangePage}
+            />
+          )
+          : ''
+      }
+    </Paper>
+  );
 }
+
 Table.propTypes = {
-  id: PropTypes.string.isRequired,
+  classes: PropTypes.objectOf(PropTypes.any).isRequired,
+  id: PropTypes.string,
+  columns: PropTypes.arrayOf(PropTypes.shape(
+    {
+      field: PropTypes.string.isRequired,
+      label: PropTypes.string,
+      align: PropTypes.string,
+      format: PropTypes.func,
+    },
+  )).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  actions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  order: PropTypes.string,
   orderBy: PropTypes.string,
-  onSelect: PropTypes.func.isRequired,
-  onSort: PropTypes.func.isRequired,
+  order: PropTypes.string,
+  onSort: PropTypes.func,
+  onSelect: PropTypes.func,
+  actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  page: PropTypes.number,
   count: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  onChangeRowsPerPage: PropTypes.func.isRequired,
+  rowsPerPage: PropTypes.number,
+  onChangePage: PropTypes.func,
 };
+
 Table.defaultProps = {
+  id: '',
   order: 'asc',
   orderBy: '',
+  onSort: () => {},
+  onSelect: () => {},
+  onChangePage: () => {},
+  page: 0,
+  rowsPerPage: 100,
 };
-export default withStyles(styles)(Table);
+
+export default withLoaderAndMessage(withStyles(styles)(Table));

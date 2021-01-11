@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -7,57 +7,50 @@ import {
 
 import { SnackBarContext } from '../../../../contexts';
 
-class RemoveDialog extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  handleDeleteClose = (event, value) => {
+function RemoveDialog(props) {
+  const handleDeleteClose = (event, openSnackBar) => {
     event.preventDefault();
-    const { details, onClose } = this.props;
+    const { details, onClose } = props;
     const originalDate = new Date(details.createdAt);
     const dateCheck = new Date('2019-02-14');
     if (originalDate > dateCheck) {
       // eslint-disable-next-line no-console
       console.log('Deleted Item', details);
-      value('Successfully Deleted!', 'success');
+      openSnackBar('Successfully Deleted!', 'success');
     } else {
-      value('Can\'t Delete!', 'error');
+      openSnackBar('Can\'t Delete!', 'error');
     }
     onClose();
   };
 
-  render() {
-    const { deleteOpen, onClose } = this.props;
-    return (
-      <SnackBarContext.Consumer>
-        {
-          (value) => (
-            <Dialog
-              open={deleteOpen}
-              onClose={onClose}
-            >
-              <DialogTitle>Remove Trainee</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Do you really want to remove trainee?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={onClose} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={(event) => this.handleDeleteClose(event, value)} color="primary" variant="contained">
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
-          )
-        }
-      </SnackBarContext.Consumer>
-    );
-  }
+  const { deleteOpen, onClose } = props;
+  return (
+    <SnackBarContext.Consumer>
+      {
+        (openSnackBar) => (
+          <Dialog
+            open={deleteOpen}
+            onClose={onClose}
+          >
+            <DialogTitle>Remove Trainee</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Do you really want to remove trainee?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={(event) => handleDeleteClose(event, openSnackBar)} color="primary" variant="contained">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )
+      }
+    </SnackBarContext.Consumer>
+  );
 }
 
 RemoveDialog.propTypes = {

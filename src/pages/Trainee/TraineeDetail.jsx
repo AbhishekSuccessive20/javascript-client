@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -7,14 +6,15 @@ import {
   Typography, Card, CardContent, CardMedia, Button, Link,
 } from '@material-ui/core';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { NoMatch } from '..';
 
-import trainee from './data/trainee';
+import callApi from '../../lib/utils/api';
+
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = {
   card: {
     display: 'flex',
   },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'lightgrey',
     marginTop: '2%',
   },
-}));
+};
 
 const check = (item, classes) => (
   <div>
@@ -66,26 +66,56 @@ const check = (item, classes) => (
   </div>
 );
 
-const getTrainee = (id) => {
+const getTrainee = async (id, skip, limit) => {
   let result;
-  trainee.forEach((item) => {
-    if (item.id === id) {
-      result = item;
-    }
-  });
+  await callApi('/trainee', 'GET', {}, localStorage.getItem('token'), { skip, limit })
+    .then((data) => {
+      data.data.Trainees.data.records.forEach((res) => {
+        if (res.id === id) {
+          result = res;
+        }
+      });
+    });
   return result;
 };
 
-export default function TraineeDetails(props) {
-  const classes = useStyles();
-  const { match } = props;
-  const item = getTrainee(match.params.id);
-  if (item) {
-    return check(item, classes);
+class TraineeDetails extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      item: {},
+    };
   }
-  return <NoMatch />;
+
+  componentDidMount() {
+    const { match, location } = this.props;
+    const { id } = match.params;
+    const { skip, limit } = location.state;
+    getTrainee(id, skip, limit)
+      .then((data) => {
+        this.setState({
+          item: data,
+        });
+      });
+  }
+
+  render = () => {
+    const { classes } = this.props;
+    const { item } = this.state;
+    return (
+      <>
+        {
+          (item) ? (check(item, classes)) : (<NoMatch />)
+        }
+      </>
+    );
+  }
 }
 
 TraineeDetails.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+  classes: PropTypes.objectOf(PropTypes.any).isRequired,
 };
+
+export default withStyles(useStyles)(TraineeDetails);

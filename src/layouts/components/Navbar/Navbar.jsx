@@ -5,7 +5,6 @@ import {
 } from '@material-ui/core';
 
 import { Link as RouterLink } from 'react-router-dom';
-import ls from 'local-storage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +43,7 @@ export default function Navbar() {
           <Link component={RouterLink} to="/children-demo" color="inherit">
             <Button color="inherit">CHILDREN DEMO</Button>
           </Link>
-          <Button href="/login" color="inherit" style={{ marginLeft: 30 }} onClick={() => { ls.clear('token'); }}>LOGOUT</Button>
+          <Button component={RouterLink} to="/login" color="inherit" className={classes.margin} onClick={handleLogout}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
-import { Redirect } from 'react-router-dom';
-import ls from 'local-storage';
 
 import {
   Avatar, Button, Paper, Typography, TextField, IconButton, InputAdornment, CircularProgress,
@@ -14,6 +12,7 @@ import {
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 import { SnackBarContext } from '../../contexts';
 
 import callApi from '../../lib/utils/api';
@@ -50,36 +49,33 @@ const styles = (theme) => ({
 });
 
 class Login extends Component {
-  schema = yup.object().shape({
-    email: yup
-      .string()
-      .email()
-      .required()
-      .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
-        'Invalid Domain')
-      .label('Email'),
-    password: yup
-      .string()
-      .required()
-      .label('Password'),
-  });
+    schema = yup.object().shape({
+      email: yup
+        .string()
+        .email()
+        .required()
+        .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
+          'Invalid Domain')
+        .label('Email'),
+      password: yup
+        .string()
+        .required()
+        .label('Password'),
+    });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      showPassword: false,
-      loading: false,
-      redirect: false,
-      message: '',
-      touched: {
-        email: false,
-        password: false,
-      },
-      progress: false,
-    };
-  }
+    constructor(props) {
+      super(props);
+      this.state = {
+        email: '',
+        password: '',
+        showPassword: false,
+        touched: {
+          email: false,
+          password: false,
+        },
+        progress: false,
+      };
+    }
 
   handleClickShowPassword = () => {
     this.setState((state) => ({ showPassword: !state.showPassword }));
@@ -104,7 +100,7 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token');
+        localStorage.setItem('token', response.data.data);
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
@@ -119,7 +115,11 @@ class Login extends Component {
           },
           progress: false,
         });
-        openSnackBar('Error while logging in!', 'error');
+        if (err.request.status === 0) {
+          openSnackBar('Connection Refused', 'error');
+        } else {
+          openSnackBar(err.response.data.message, 'error');
+        }
       });
   }
 
@@ -150,41 +150,6 @@ class Login extends Component {
       return false;
     }
     return true;
-  }
-
-  renderRedirect = () => {
-    const { redirect } = this.state;
-    if (redirect) {
-      return <Redirect to="/trainee" />;
-    }
-    return null;
-  }
-
-  onClickHandler = async (data, openSnackBar) => {
-    this.setState({
-      loading: true,
-      hasError: true,
-    });
-    const response = await callApi('user/login', 'post', data);
-    ls.set('token', response.data);
-    this.setState({ loading: false });
-    const Token = ls.get('token');
-    if (Token !== 'undefined') {
-      this.setState({
-        redirect: true,
-        hasError: false,
-        message: 'Login successfully',
-      });
-      const { message } = this.state;
-      openSnackBar(message, 'success');
-    } else {
-      this.setState({
-        message: 'Email or Password is incorrect',
-      }, () => {
-        const { message } = this.state;
-        openSnackBar(message, 'error');
-      });
-    }
   }
 
   isTouched = (field) => {
@@ -265,13 +230,13 @@ class Login extends Component {
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton onClick={this.handleClickShowPassword}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                          {showPassword ? <Visibility /> : <VisibilityOff /> }
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
                 />
-                {progress ? (
+                { progress ? (
                   <Button variant="contained" className={classes.submit} disabled>
                     <CircularProgress size={20} />
                   </Button>
@@ -287,7 +252,7 @@ class Login extends Component {
                   >
                     Sign in
                   </Button>
-                )}
+                ) }
               </Paper>
             </main>
           )

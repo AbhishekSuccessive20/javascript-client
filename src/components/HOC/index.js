@@ -1,3 +1,1 @@
-import hoc from './withLoaderandMessage';
-
-export default hoc;
+export { default as withLoaderAndMessage } from './withLoaderandMessage';

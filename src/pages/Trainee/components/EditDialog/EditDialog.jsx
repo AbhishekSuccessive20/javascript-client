@@ -132,10 +132,11 @@ class EditDialog extends Component {
     });
   }
 
-  onSubmit = (event, value) => {
+  onSubmit = (event, openSnackBar) => {
     const { onClose } = this.props;
+    event.preventDefault();
     this.onConsole();
-    value('Successfully Edited!', 'success');
+    openSnackBar('Successfully Edited!', 'success');
     onClose();
   }
 
@@ -144,7 +145,7 @@ class EditDialog extends Component {
     return (
       <SnackBarContext.Consumer>
         {
-          (value) => (
+          (openSnackBar) => (
             <Dialog open={editOpen} onClose={this.handleClose}>
               <DialogTitle>Edit Trainee</DialogTitle>
               <DialogContent>
@@ -199,7 +200,7 @@ class EditDialog extends Component {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={(event) => this.onSubmit(event, value)}
+                  onClick={(event) => this.onSubmit(event, openSnackBar)}
                   disabled={!(this.handleButtonError())}
                 >
                   Submit

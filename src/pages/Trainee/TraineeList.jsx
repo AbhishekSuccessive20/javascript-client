@@ -1,6 +1,4 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-console */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -8,13 +6,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { Table } from '../../components';
-import trainee from './data/trainee';
+import callApi from '../../lib/utils/api';
+import { limit } from '../../configs/constants';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 import { AddDialogue, EditDialog, RemoveDialog } from './components';
-import callApi from '../../lib/utils/api';
-import { SnackBarContext } from '../../contexts/index';
 
-class TraineeList extends Component {
+class TraineeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,13 +21,39 @@ class TraineeList extends Component {
       deleteOpen: false,
       editOpen: false,
       traineeData: {},
+      records: [],
+      totalRecords: 0,
       page: 0,
-      dataObj: [],
-      rowsPerPage: 10,
-      limit: 20,
-      skip: 0,
+      loader: false,
     };
   }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const header = localStorage.getItem('token');
+    const { page } = this.state;
+    const params = {
+      skip: page * limit,
+      limit,
+    };
+    this.setState({ loader: true });
+    await callApi('/trainee', 'GET', {}, header, params)
+      .then((data) => {
+        this.setState({
+          records: data.data.Trainees.data.records,
+          totalRecords: data.data.Trainees.data.count,
+        });
+      })
+      .catch((err) => {
+        if (err.response.data.status === 401) {
+          localStorage.removeItem('token');
+        }
+      });
+    this.setState({ loader: false });
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -58,61 +81,34 @@ class TraineeList extends Component {
     this.setState({ deleteOpen: true, traineeData: data });
   };
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-    this.componentDidMount(page);
-  }
-
   handleSubmit = (temp) => {
     this.setState({ open: false });
+    this.getData();
   }
-
-  componentDidMount = () => {
-    const { limit, skip, dataObj } = this.state;
-    const value = this.context;
-    callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
-      if (response.data === undefined) {
-        this.setState({
-          message: 'This is an error while displaying Trainee',
-        }, () => {
-          const { message } = this.state;
-          value.openSnackBar(message, 'error');
-        });
-      } else {
-        const { records, count } = response.data;
-        this.setState({ dataObj: records });
-        return response;
-      }
-      console.log('dataObj : ', dataObj);
-    });
-  }
-
-  handleChangeRowsPerPage = (event) => {
-    this.setState({
-      rowsPerPage: event.target.value,
-      page: 0,
-
-    });
-  };
 
   renderTrainee = (item, index) => {
     const { match } = this.props;
+    const { page } = this.state;
+    const skip = page * limit;
     return (
       <li key={index}>
-        <Link to={`${match.path}/${item.id}`}>
+        <Link to={{ pathname: `${match.path}/${item.id}`, state: { skip, limit } }}>
           {item.name}
         </Link>
       </li>
     );
   }
 
-  renderTrainees = () => (
-    <ul>
-      {
-        trainee.map((item, index) => this.renderTrainee(item, index))
-      }
-    </ul>
-  )
+  renderTrainees = () => {
+    const { records } = this.state;
+    return (
+      <ul>
+        {
+          records.map((item, index) => this.renderTrainee(item, index))
+        }
+      </ul>
+    );
+  }
 
   handleSort = (field) => {
     const { order, orderBy } = this.state;
@@ -129,16 +125,25 @@ class TraineeList extends Component {
     }
   }
 
+  handleChangePage = (event, page) => {
+    event.preventDefault();
+    this.setState({ page }, () => this.getData());
+  }
+
   handleSelect = (event, id) => {
     const { history, match } = this.props;
+    const { page } = this.state;
+    const skip = page * limit;
     event.preventDefault();
-    history.push(`${match.path}/${id}`);
+    history.push(`${match.path}/${id}`, { skip, limit });
   }
 
   render() {
     const {
-      open, order, orderBy, traineeData, page, deleteOpen, editOpen,
-      rowsPerPage, deleteData, dataObj,
+      open,
+      order,
+      orderBy,
+      traineeData, page, deleteOpen, editOpen, records, totalRecords, loader,
     } = this.state;
     return (
       <>
@@ -154,7 +159,7 @@ class TraineeList extends Component {
         </div>
         <Table
           id="id"
-          data={dataObj}
+          data={records}
           columns={
             [
               {
@@ -188,11 +193,12 @@ class TraineeList extends Component {
           orderBy={orderBy}
           onSort={this.handleSort}
           onSelect={this.handleSelect}
-          count={100}
-          rowsPerPage={5}
+          count={totalRecords}
+          rowsPerPage={limit}
           page={page}
           onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          loader={loader}
+          dataLength={totalRecords}
         />
         {this.renderTrainees()}
         <AddDialogue
@@ -215,7 +221,6 @@ class TraineeList extends Component {
   }
 }
 
-TraineeList.contextType = SnackBarContext;
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
