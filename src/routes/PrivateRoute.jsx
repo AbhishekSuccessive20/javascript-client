@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
+import localStorage from 'local-storage';
 import { PrivateLayout } from '../layouts';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (

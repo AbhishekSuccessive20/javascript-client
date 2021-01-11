@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
 import {
   Table as TableUI,
   TableBody,
@@ -12,6 +13,8 @@ import {
   Paper,
   IconButton,
 } from '@material-ui/core';
+
+import hoc from '../HOC/index';
 
 const styles = (theme) => ({
   root: {
@@ -36,137 +39,90 @@ class Table extends Component {
     this.state = {};
   }
 
-  renderColumn = (item) => {
-    const { order, orderBy, onSort } = this.props;
-    return (
-      <TableCell style={{ color: 'grey' }} align={(item.align) ? item.align : 'left'}>
-        <TableSortLabel
-          active={orderBy === item.field}
-          direction={order}
-          onClick={() => onSort(item.field)}
-          align={(item.align) === 'right' ? 'left' : 'right'}
-        >
-          {item.label ? item.label : item.field}
-        </TableSortLabel>
-      </TableCell>
-    );
-  }
-
-  renderColumns = (columns) => (
-    <TableRow>
-      {
-        columns.map((item) => this.renderColumn(item))
-      }
-    </TableRow>
-  )
-
-  renderRow = (data, col) => {
-    const { onSelect } = this.props;
-    let value = data[col.field];
-    if (col.format) {
-      value = col.format(value);
-    }
-
-    return (
-      <TableCell align={(col.align) ? col.align : 'left'} onClick={(event) => onSelect(event, data.id)}>
-        {value}
-      </TableCell>
-    );
-  }
-
-  renderRows = (data, columns) => {
-    const { classes, actions } = this.props;
-    return (
-      <TableRow className={classes.row} hover>
-        {
-          columns.map((col) => this.renderRow(data, col))
-        }
-        <TableCell>
-          {
-            actions.map((action) => (
-              <IconButton onClick={(event) => action.handler(event, data)}>
-                {action.icon}
-              </IconButton>
-            ))
-          }
-        </TableCell>
-      </TableRow>
-    );
-  }
-
   render() {
     const {
-      classes, data, columns, id, count, rowsPerPage, page, onChangePage,
+      id, columns, classes, order, orderBy, onSort, onSelect,
+      actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = this.props;
     return (
-      <Paper className={classes.root} key={id}>
-        <TableUI className={classes.table} aria-label="simple table">
+      <TableUI component={Paper} className={classes.tableContainer}>
+        <Table className={classes.table}>
           <TableHead>
-            { this.renderColumns(columns) }
+            <TableRow>
+              {
+                columns.length && columns.map(({
+                  align, field, lable,
+                }) => (
+                  <TableCell
+                    align={align}
+                    className={classes.tableHeader}
+                  >
+                    <TableSortLabel
+                      active={orderBy === field}
+                      direction={orderBy === field ? order : 'asc'}
+                      onClick={onSort(field)}
+                    >
+                      {lable}
+                    </TableSortLabel>
+                  </TableCell>
+                ))
+              }
+            </TableRow>
           </TableHead>
           <TableBody>
-            {
-              data.map((row) => this.renderRows(row, columns, classes))
-            }
+            {(rowsPerPage > 0
+              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : data
+            ).map((item) => (
+              <TableRow className={classes.tableRow} key={item[id]}>
+                {
+                  columns && columns.length && columns.map(({ align, field, format }) => (
+                    <TableCell onClick={(event) => onSelect(event, item.name)} align={align} component="th" scope="row" order={order} ordery={orderBy}>
+                      {format ? format(item[field]) : item[field]}
+                    </TableCell>
+                  ))
+                }
+                {actions && actions.length && actions.map(({ icon, handler }) => (
+                  <TableRow>
+                    <IconButton onClick={() => handler(item)}>
+                      {icon}
+                    </IconButton>
+                  </TableRow>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
-        </TableUI>
-        {
-          count
-            ? (
-              <TablePagination
-                rowsPerPageOptions={[]}
-                component="div"
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{
-                  'aria-label': 'Previous Page',
-                }}
-                nextIconButtonProps={{
-                  'aria-label': 'Next Page',
-                }}
-                onChangePage={onChangePage}
-              />
-            )
-            : ''
-        }
-      </Paper>
+          <TablePagination
+            rowsPerPageOptions={0}
+            count={count}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+          />
+        </Table>
+      </TableUI>
     );
   }
 }
-
 Table.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.any).isRequired,
-  id: PropTypes.string,
-  columns: PropTypes.arrayOf(PropTypes.shape(
-    {
-      field: PropTypes.string.isRequired,
-      label: PropTypes.string,
-      align: PropTypes.string,
-      format: PropTypes.func,
-    },
-  )).isRequired,
+  id: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  orderBy: PropTypes.string,
-  order: PropTypes.string,
-  onSort: PropTypes.func,
-  onSelect: PropTypes.func,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  page: PropTypes.number,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  order: PropTypes.string,
+  orderBy: PropTypes.string,
+  onSelect: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired,
   count: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number,
-  onChangePage: PropTypes.func,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  onChangeRowsPerPage: PropTypes.func.isRequired,
 };
-
 Table.defaultProps = {
-  id: '',
   order: 'asc',
   orderBy: '',
-  onSort: () => {},
-  onSelect: () => {},
-  onChangePage: () => {},
-  page: 0,
-  rowsPerPage: 100,
 };
-
 export default withStyles(styles)(Table);

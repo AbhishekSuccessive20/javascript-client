@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
+import { Redirect } from 'react-router-dom';
+import ls from 'local-storage';
 
 import {
   Avatar, Button, Paper, Typography, TextField, IconButton, InputAdornment, CircularProgress,
@@ -68,6 +70,9 @@ class Login extends Component {
       email: '',
       password: '',
       showPassword: false,
+      loading: false,
+      redirect: false,
+      message: '',
       touched: {
         email: false,
         password: false,
@@ -99,7 +104,7 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token', response.data.data);
+        localStorage.setItem('token');
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
@@ -114,7 +119,7 @@ class Login extends Component {
           },
           progress: false,
         });
-        openSnackBar(err.response.data.message, 'error');
+        openSnackBar('Error while logging in!', 'error');
       });
   }
 
@@ -145,6 +150,41 @@ class Login extends Component {
       return false;
     }
     return true;
+  }
+
+  renderRedirect = () => {
+    const { redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/trainee" />;
+    }
+    return null;
+  }
+
+  onClickHandler = async (data, openSnackBar) => {
+    this.setState({
+      loading: true,
+      hasError: true,
+    });
+    const response = await callApi('user/login', 'post', data);
+    ls.set('token', response.data);
+    this.setState({ loading: false });
+    const Token = ls.get('token');
+    if (Token !== 'undefined') {
+      this.setState({
+        redirect: true,
+        hasError: false,
+        message: 'Login successfully',
+      });
+      const { message } = this.state;
+      openSnackBar(message, 'success');
+    } else {
+      this.setState({
+        message: 'Email or Password is incorrect',
+      }, () => {
+        const { message } = this.state;
+        openSnackBar(message, 'error');
+      });
+    }
   }
 
   isTouched = (field) => {
