@@ -10,7 +10,6 @@ import {
 } from './pages';
 
 import { AuthRoute, PrivateRoute } from './routes';
-
 import { SnackBarProvider } from './contexts';
 
 function App() {
@@ -35,5 +34,4 @@ function App() {
     </>
   );
 }
-
 export default App;

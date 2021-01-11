@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
 import { Table } from '../../components';
 import callApi from '../../lib/utils/api';
 import { limit } from '../../configs/constants';
@@ -179,6 +178,7 @@ class TraineeList extends React.Component {
               },
             ]
           }
+
           actions={[
             {
               icon: <EditIcon />,
@@ -189,6 +189,7 @@ class TraineeList extends React.Component {
               handler: this.handleRemoveDialogOpen,
             },
           ]}
+
           order={order}
           orderBy={orderBy}
           onSort={this.handleSort}
