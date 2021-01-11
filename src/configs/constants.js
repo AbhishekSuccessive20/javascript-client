@@ -23,3 +23,4 @@ export const footballOptions = [
 export const footballStr = 'football';
 export const cricketStr = 'cricket';
 export const limit = 20;
+export const date = '2019-02-14';
