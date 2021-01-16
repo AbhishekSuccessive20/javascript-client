@@ -57,7 +57,6 @@ function InputDemo(props) {
         ...state,
         football: e.target.value,
       });
-    }
   };
 
   const hasErrors = () => {

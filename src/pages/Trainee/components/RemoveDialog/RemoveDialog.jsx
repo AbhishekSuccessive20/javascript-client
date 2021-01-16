@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, CircularProgress,
 } from '@material-ui/core';
 
 import { SnackBarContext } from '../../../../contexts';
+import callApi from '../../../../lib/utils/api';
+import { date } from '../../../../configs/constants';
 
 function RemoveDialog(props) {
+  const [loader, setLoader] = useState(false);
   const handleDeleteClose = (event, openSnackBar) => {
     event.preventDefault();
-    const { details, onClose } = props;
+    const { details, onClose, onSubmit } = props;
     const originalDate = new Date(details.createdAt);
-    const dateCheck = new Date('2019-02-14');
+    const dateCheck = new Date(date);
+    setLoader(true);
     if (originalDate > dateCheck) {
-      // eslint-disable-next-line no-console
-      console.log('Deleted Item', details);
-      openSnackBar('Successfully Deleted!', 'success');
+      callApi(`/trainee/${details.id}`, 'DELETE', {}, localStorage.getItem('token'))
+        .then((res) => {
+          openSnackBar(res.data.message, 'success');
+          onSubmit();
+        })
+        .catch((err) => {
+          openSnackBar(err.response.data.message, 'error');
+        });
     } else {
       openSnackBar('Can\'t Delete!', 'error');
     }
+    setLoader(false);
     onClose();
   };
 
@@ -42,9 +52,17 @@ function RemoveDialog(props) {
               <Button onClick={onClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={(event) => handleDeleteClose(event, openSnackBar)} color="primary" variant="contained">
-                Delete
-              </Button>
+              {
+                loader ? (
+                  <Button variant="contained" disabled>
+                    <CircularProgress size={20} />
+                  </Button>
+                ) : (
+                  <Button onClick={(event) => handleDeleteClose(event, openSnackBar)} color="primary" variant="contained">
+                    Delete
+                  </Button>
+                )
+              }
             </DialogActions>
           </Dialog>
         )
@@ -56,11 +74,13 @@ function RemoveDialog(props) {
 RemoveDialog.propTypes = {
   details: PropTypes.objectOf(PropTypes.any).isRequired,
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
   deleteOpen: PropTypes.bool,
 };
 
 RemoveDialog.defaultProps = {
   onClose: () => {},
+  onSubmit: () => {},
   deleteOpen: false,
 };
 
