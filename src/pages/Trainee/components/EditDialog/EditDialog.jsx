@@ -10,16 +10,22 @@ import {
   DialogTitle,
   Button,
   TextField,
+  CircularProgress,
   InputAdornment,
 } from '@material-ui/core';
 
 import { Email, Person } from '@material-ui/icons';
 import { SnackBarContext } from '../../../../contexts';
+import callApi from '../../../../lib/utils/api';
 
 class EditDialog extends Component {
   schema = yup.object().shape({
     name: yup.string().required().min(3).label('Name'),
-    email: yup.string().email().required().label('Email'),
+    email: yup.string().email()
+      .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
+        'Invalid Domain')
+      .required()
+      .label('Email'),
   });
 
   constructor(props) {
@@ -31,6 +37,7 @@ class EditDialog extends Component {
         name: false,
         email: false,
       },
+      loader: false,
     };
   }
 
@@ -117,34 +124,51 @@ class EditDialog extends Component {
     return this.hasErrors();
   }
 
-  onConsole = () => {
+  onSubmit = async (event, openSnackBar) => {
+    event.preventDefault();
+    const { onSubmit, details, onClose } = this.props;
     const { name, email } = this.state;
-    // eslint-disable-next-line no-console
-    console.log('Edited Item', { name, email });    
-    this.setState({
-      buttonEnable: false,
-      name: '',
-      email: '',
-      touched: {
-        name: false,
-        email: false,
-      },
-    });
-  }
-
-  onSubmit = (event, value) => {
-    const { onClose } = this.props;
-    this.onConsole();
-    value('Successfully Edited!', 'success');
+    const header = localStorage.getItem('token');
+    const { id } = details;
+    this.setState({ loader: true });
+    const dataToUpdate = {
+      name,
+      email,
+    };
+    if (name === details.name) {
+      delete dataToUpdate.name;
+    }
+    if (email === details.email) {
+      delete dataToUpdate.email;
+    }
+    await callApi('/trainee', 'PUT', { id, dataToUpdate }, header)
+      .then((res) => {
+        openSnackBar(res.data.message, 'success');
+        this.setState({
+          buttonEnable: false,
+          name: '',
+          email: '',
+          touched: {
+            name: false,
+            email: false,
+          },
+        });
+        onSubmit();
+      })
+      .catch((err) => {
+        openSnackBar(err.response.data.message, 'error');
+      });
     onClose();
+    this.setState({ loader: false });
   }
 
   render() {
     const { editOpen, onClose, details } = this.props;
+    const { loader } = this.state;
     return (
       <SnackBarContext.Consumer>
         {
-          (value) => (
+          (openSnackBar) => (
             <Dialog open={editOpen} onClose={this.handleClose}>
               <DialogTitle>Edit Trainee</DialogTitle>
               <DialogContent>
@@ -196,14 +220,23 @@ class EditDialog extends Component {
                 <Button color="primary" onClick={onClose}>
                   Cancel
                 </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={(event) => this.onSubmit(event, value)}
-                  disabled={!(this.handleButtonError())}
-                >
-                  Submit
-                </Button>
+                {
+                  loader ? (
+                    <Button variant="contained" disabled>
+                      <CircularProgress size={20} />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(event) => this.onSubmit(event, openSnackBar)}
+                      disabled={!(this.handleButtonError())}
+                    >
+                      Submit
+                    </Button>
+                  )
+                }
+
               </DialogActions>
             </Dialog>
           )
@@ -217,10 +250,12 @@ EditDialog.propTypes = {
   details: PropTypes.objectOf(PropTypes.any).isRequired,
   onClose: PropTypes.func,
   editOpen: PropTypes.bool,
+  onSubmit: PropTypes.func,
 };
 
 EditDialog.defaultProps = {
   onClose: () => {},
+  onSubmit: () => {},
   editOpen: false,
 };
 

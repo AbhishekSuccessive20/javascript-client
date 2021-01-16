@@ -16,6 +16,10 @@ import { SnackBarContext } from '../../contexts';
 
 import callApi from '../../lib/utils/api';
 
+import { SnackBarContext } from '../../contexts';
+
+import callApi from '../../lib/utils/api';
+
 const styles = (theme) => ({
   main: {
     width: 'auto',
@@ -48,24 +52,33 @@ const styles = (theme) => ({
 });
 
 class Login extends Component {
-  schema = yup.object().shape({
-    email: yup
-      .string()
-      .email()
-      .required()
-      .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
-        'Invalid Domain')
-      .label('Email'),
-    password: yup
-      .string()
-      .required()
-      .label('Password'),
-  });
+    schema = yup.object().shape({
+      email: yup
+        .string()
+        .email()
+        .required()
+        .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
+          'Invalid Domain')
+        .label('Email'),
+      password: yup
+        .string()
+        .required()
+        .label('Password'),
+    });
 
-  constructor(props) {
-    super(props);
-    this.baseSate = this.state();
-  }
+    constructor(props) {
+      super(props);
+      this.state = {
+        email: '',
+        password: '',
+        showPassword: false,
+        touched: {
+          email: false,
+          password: false,
+        },
+        progress: false,
+      };
+    }
 
   handleClickShowPassword = () => {
     this.setState((state) => ({ showPassword: !state.showPassword }));
@@ -217,13 +230,14 @@ class Login extends Component {
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton onClick={this.handleClickShowPassword}>
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                          {showPassword ? <Visibility /> : <VisibilityOff /> }
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
                 />
-                {progress ? (
+
+                { progress ? (
                   <Button variant="contained" className={classes.submit} disabled>
                     <CircularProgress size={20} />
                   </Button>
@@ -239,7 +253,7 @@ class Login extends Component {
                   >
                     Sign in
                   </Button>
-                )}
+                ) }
               </Paper>
             </main>
           )

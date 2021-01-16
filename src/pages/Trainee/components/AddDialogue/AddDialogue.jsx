@@ -13,16 +13,22 @@ import {
   InputAdornment,
   Button,
   IconButton,
+  CircularProgress,
 } from '@material-ui/core';
 
 import {
-  Visibility, VisibilityOff, Email, Person,
+  Visibility, VisibilityOff, Email, Person, PersonOutline,
 } from '@material-ui/icons';
 
 import { SnackBarContext } from '../../../../contexts';
+import callApi from '../../../../lib/utils/api';
 
 class AddDialogue extends Component {
     schema = yup.object().shape({
+      id: yup
+        .string()
+        .required()
+        .label('Id'),
       name: yup
         .string()
         .required()
@@ -32,6 +38,8 @@ class AddDialogue extends Component {
         .string()
         .email()
         .required()
+        .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
+          'Invalid Domain')
         .label('Email'),
       password: yup
         .string()
@@ -51,6 +59,7 @@ class AddDialogue extends Component {
     constructor(props) {
       super(props);
       this.state = {
+        id: '',
         name: '',
         email: '',
         password: '',
@@ -58,11 +67,13 @@ class AddDialogue extends Component {
         showPassword: false,
         showMatchPassword: false,
         touched: {
+          id: false,
           name: false,
           email: false,
           password: false,
           confirmPswd: false,
         },
+        progress: false,
       };
     }
 
@@ -136,17 +147,53 @@ class AddDialogue extends Component {
       return this.hasErrors();
     }
 
-    onSubmit = (event, value) => {
+    onSubmit = async (event, openSnackBar) => {
+      event.preventDefault();
       const { onSubmit } = this.props;
       const {
+        id,
         name,
         email,
         password,
+        progress,
       } = this.state;
-      // eslint-disable-next-line no-console
-      console.log({ name, email, password });
-      value('Successfully Added!', 'success');
-      onSubmit({ name, email, password });
+      this.setState({
+        progress: true,
+      });
+      const header = localStorage.getItem('token');
+      await callApi('/trainee', 'POST', {
+        id, name, email, password,
+      }, header)
+        .then((response) => {
+          openSnackBar(response.data.message, 'success');
+          this.setState({
+            id: '',
+            name: '',
+            email: '',
+            password: '',
+            showPassword: false,
+            confirmPswd: '',
+            touched: {
+              id: false,
+              name: false,
+              email: false,
+              password: false,
+              confirmPswd: false,
+            },
+            progress: false,
+          });
+          // eslint-disable-next-line no-console
+          console.log({
+            id, name, email, password,
+          });
+          onSubmit();
+        })
+        .catch((err) => {
+          this.setState({
+            progress: false,
+          });
+          openSnackBar(err.response.data.message, 'error');
+        });
     }
 
     onClose = () => {
@@ -154,23 +201,49 @@ class AddDialogue extends Component {
     }
 
     render() {
-      const { open, onClose, onSubmit } = this.props;
       const {
+        open, onClose,
+      } = this.props;
+      const {
+        id,
         name,
         email,
         password,
         confirmPswd,
         showPassword,
         showMatchPassword,
+        progress,
       } = this.state;
       return (
         <SnackBarContext.Consumer>
           {
-            (value) => (
+            (openSnackBar) => (
               <Dialog open={open} onClose={onClose} maxWidth="lg">
                 <DialogTitle>Add Trainee</DialogTitle>
                 <DialogContent>
                   <DialogContentText>Enter your trainee details</DialogContentText>
+                  <TextField
+                    label="Id *"
+                    value={id}
+                    variant="outlined"
+                    onChange={this.handleValue('id')}
+                    onBlur={() => this.isTouched('id')}
+                    helperText={this.getError('id')}
+                    error={this.isValid('id')}
+                    fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonOutline />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <br />
+                  <br />
                   <TextField
                     label="Name *"
                     value={name}
@@ -277,14 +350,20 @@ class AddDialogue extends Component {
                   <Button color="primary" onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={(event) => this.onSubmit(event, value)}
-                    disabled={!(this.handleButtonError())}
-                  >
-                    Submit
-                  </Button>
+                  { progress ? (
+                    <Button variant="contained" disabled>
+                      <CircularProgress size={20} />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(event) => this.onSubmit(event, openSnackBar)}
+                      disabled={!(this.handleButtonError())}
+                    >
+                      Submit
+                    </Button>
+                  )}
                 </DialogActions>
               </Dialog>
             )

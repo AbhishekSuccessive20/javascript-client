@@ -68,7 +68,7 @@ export default class SnackBarProvider extends Component {
     );
   }
 
-  closeSnackBar = (event) => {
+  closeSnackBar = () => {
     this.setState({ open: false });
   };
 

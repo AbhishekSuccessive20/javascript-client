@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -12,6 +12,8 @@ import {
   Paper,
   IconButton,
 } from '@material-ui/core';
+
+import { withLoaderAndMessage } from '../HOC';
 
 const styles = (theme) => ({
   root: {
@@ -30,14 +32,9 @@ const styles = (theme) => ({
   },
 });
 
-class Table extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  renderColumn = (item) => {
-    const { order, orderBy, onSort } = this.props;
+function Table(props) {
+  const renderColumn = (item) => {
+    const { order, orderBy, onSort } = props;
     return (
       <TableCell style={{ color: 'grey' }} align={(item.align) ? item.align : 'left'}>
         <TableSortLabel
@@ -50,18 +47,18 @@ class Table extends Component {
         </TableSortLabel>
       </TableCell>
     );
-  }
-  
-  renderColumns = (columns) => (
+  };
+
+  const renderColumns = (columns) => (
     <TableRow>
       {
-        columns.map((item) => this.renderColumn(item))
+        columns.map((item) => renderColumn(item))
       }
     </TableRow>
-  )
+  );
 
-  renderRow = (data, col) => {
-    const { onSelect } = this.props;
+  const renderRow = (data, col) => {
+    const { onSelect } = props;
     let value = data[col.field];
     if (col.format) {
       value = col.format(value);
@@ -72,14 +69,14 @@ class Table extends Component {
         {value}
       </TableCell>
     );
-  }
+  };
 
-  renderRows = (data, columns) => {
-    const { classes, actions } = this.props;
+  const renderRows = (data, columns) => {
+    const { classes, actions } = props;
     return (
       <TableRow className={classes.row} hover>
         {
-          columns.map((col) => this.renderRow(data, col))
+          columns.map((col) => renderRow(data, col))
         }
         <TableCell>
           {
@@ -92,47 +89,47 @@ class Table extends Component {
         </TableCell>
       </TableRow>
     );
-  }
+  };
 
-  render() {
-    const {
-      classes, data, columns, id, count, rowsPerPage, page, onChangePage,
-    } = this.props;
-    return (
-      <Paper className={classes.root} key={id}>
-        <TableUI className={classes.table} aria-label="simple table">
-          <TableHead>
-            { this.renderColumns(columns) }
-          </TableHead>
-          <TableBody>
-            {
-              data.map((row) => this.renderRows(row, columns, classes))
-            }
-          </TableBody>
-        </TableUI>
-        {
-          count
-            ? (
-              <TablePagination
-                rowsPerPageOptions={[]}
-                component="div"
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{
-                  'aria-label': 'Previous Page',
-                }}
-                nextIconButtonProps={{
-                  'aria-label': 'Next Page',
-                }}
-                onChangePage={onChangePage}
-              />
-            )
-            : ''
-        }
-      </Paper>
-    );
-  }
+  const {
+    classes, data, columns, id, count, rowsPerPage, page, onChangePage,
+  } = props;
+
+  return (
+    <Paper className={classes.root}>
+      <TableUI key={id} className={classes.table} aria-label="simple table">
+        <TableHead>
+          { renderColumns(columns) }
+        </TableHead>
+        <TableBody>
+          {
+            data
+              .map((row) => renderRows(row, columns))
+          }
+        </TableBody>
+      </TableUI>
+      {
+        count
+          ? (
+            <TablePagination
+              rowsPerPageOptions={[]}
+              component="div"
+              count={count}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              backIconButtonProps={{
+                'aria-label': 'Previous Page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'Next Page',
+              }}
+              onChangePage={onChangePage}
+            />
+          )
+          : ''
+      }
+    </Paper>
+  );
 }
 
 Table.propTypes = {
@@ -169,4 +166,4 @@ Table.defaultProps = {
   rowsPerPage: 100,
 };
 
-export default withStyles(styles)(Table);
+export default withLoaderAndMessage(withStyles(styles)(Table));

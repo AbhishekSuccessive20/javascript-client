@@ -3,6 +3,7 @@ import { CssBaseline } from '@material-ui/core';
 import {
   BrowserRouter as Router, Route, Redirect, Switch,
 } from 'react-router-dom';
+import ls from 'local-storage';
 
 import {
   Trainee, Login, NoMatch, ChildrenDemo, InputDemo, TextFieldDemo,
