@@ -12,6 +12,9 @@ import {
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { SnackBarContext } from '../../contexts';
+
+import callApi from '../../lib/utils/api';
 
 import { SnackBarContext } from '../../contexts';
 
@@ -100,7 +103,7 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token', response.data.data);
+        localStorage.setItem('token',response.data.token);
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
@@ -115,11 +118,8 @@ class Login extends Component {
           },
           progress: false,
         });
-        if (err.request.status === 0) {
-          openSnackBar('Connection Refused', 'error');
-        } else {
-          openSnackBar(err.response.data.message, 'error');
-        }
+        openSnackBar('Error While Logging in!', 'error');
+        this.setState(this.baseState);
       });
   }
 
@@ -236,6 +236,7 @@ class Login extends Component {
                     ),
                   }}
                 />
+
                 { progress ? (
                   <Button variant="contained" className={classes.submit} disabled>
                     <CircularProgress size={20} />
