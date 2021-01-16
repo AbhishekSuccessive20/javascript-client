@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import {
-  Avatar, Button, Paper, Typography, TextField, IconButton, InputAdornment,
+  Avatar, Button, Paper, Typography, TextField, IconButton, InputAdornment, CircularProgress,
 } from '@material-ui/core';
 
 import {
@@ -12,6 +12,9 @@ import {
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { SnackBarContext } from '../../contexts';
+
+import callApi from '../../lib/utils/api';
 
 const styles = (theme) => ({
   main: {
@@ -45,30 +48,24 @@ const styles = (theme) => ({
 });
 
 class Login extends Component {
-    schema = yup.object().shape({
-      email: yup
-        .string()
-        .email()
-        .required()
-        .label('Email'),
-      password: yup
-        .string()
-        .required()
-        .label('Password'),
-    });
+  schema = yup.object().shape({
+    email: yup
+      .string()
+      .email()
+      .required()
+      .matches(/^[A-Za-z0-9._%+-]+@successive.tech$/,
+        'Invalid Domain')
+      .label('Email'),
+    password: yup
+      .string()
+      .required()
+      .label('Password'),
+  });
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        email: '',
-        password: '',
-        showPassword: false,
-        touched: {
-          email: false,
-          password: false,
-        },
-      };
-    }
+  constructor(props) {
+    super(props);
+    this.baseSate = this.state();
+  }
 
   handleClickShowPassword = () => {
     this.setState((state) => ({ showPassword: !state.showPassword }));
@@ -83,6 +80,35 @@ class Login extends Component {
       this.getError(item);
     });
   };
+
+  handleSignIn = async (event, openSnackBar) => {
+    event.preventDefault();
+    const { history } = this.props;
+    const { email, password } = this.state;
+    this.setState({
+      progress: true,
+    });
+    await callApi('/user/login', 'POST', { email, password })
+      .then((response) => {
+        localStorage.setItem('token',response.data.token);
+        openSnackBar('Login Successfull!', 'success');
+        history.push('/trainee');
+      })
+      .catch((err) => {
+        this.setState({
+          email: '',
+          password: '',
+          showPassword: false,
+          touched: {
+            email: false,
+            password: false,
+          },
+          progress: false,
+        });
+        openSnackBar('Error While Logging in!', 'error');
+        this.setState(this.baseState);
+      });
+  }
 
   getError = (field) => {
     const { touched } = this.state;
@@ -104,6 +130,13 @@ class Login extends Component {
       return true;
     }
     return false;
+  }
+
+  handleButtonError = () => {
+    if (this.hasErrors()) {
+      return false;
+    }
+    return true;
   }
 
   isTouched = (field) => {
@@ -129,81 +162,96 @@ class Login extends Component {
   render() {
     const { classes } = this.props;
     const {
-      email, password, showPassword,
+      email, password, showPassword, progress,
     } = this.state;
     const temp = false;
     return (
-      <main className={classes.main}>
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <br />
-          <TextField
-            label="Email Address"
-            value={email}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleValue('email')}
-            onBlur={() => this.isTouched('email')}
-            error={this.isValid('email')}
-            helperText={this.getError('email')}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Password"
-            value={password}
-            type={showPassword ? 'text' : 'password'}
-            margin="normal"
-            variant="outlined"
-            onChange={this.handleValue('password')}
-            onBlur={() => this.isTouched('password')}
-            error={this.isValid('password')}
-            helperText={this.getError('password')}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IconButton onClick={this.handleClickShowPassword}>
-                    {showPassword ? <Visibility /> : <VisibilityOff /> }
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign in
-          </Button>
-        </Paper>
-      </main>
+      <SnackBarContext.Consumer>
+        {
+          (openSnackBar) => (
+            <main className={classes.main}>
+              <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Login
+                </Typography>
+                <br />
+                <TextField
+                  label="Email Address"
+                  value={email}
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.handleValue('email')}
+                  onBlur={() => this.isTouched('email')}
+                  error={this.isValid('email')}
+                  helperText={this.getError('email')}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Email />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Password"
+                  value={password}
+                  type={showPassword ? 'text' : 'password'}
+                  margin="normal"
+                  variant="outlined"
+                  onChange={this.handleValue('password')}
+                  onBlur={() => this.isTouched('password')}
+                  error={this.isValid('password')}
+                  helperText={this.getError('password')}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton onClick={this.handleClickShowPassword}>
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                {progress ? (
+                  <Button variant="contained" className={classes.submit} disabled>
+                    <CircularProgress size={20} />
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={!(this.handleButtonError())}
+                    onClick={(event) => this.handleSignIn(event, openSnackBar)}
+                  >
+                    Sign in
+                  </Button>
+                )}
+              </Paper>
+            </main>
+          )
+        }
+      </SnackBarContext.Consumer>
     );
   }
 }
 
 Login.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default withStyles(styles)(Login);
