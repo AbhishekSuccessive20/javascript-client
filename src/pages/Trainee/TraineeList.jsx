@@ -48,7 +48,6 @@ class TraineeList extends React.Component {
           const { records } = this.state;
           if (records.length === 0 && statePage) {
             this.setState({ page: statePage - 1 }, () => this.getData());
-          }
         });
       })
       .catch((err) => {
