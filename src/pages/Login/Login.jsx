@@ -15,6 +15,9 @@ import {
 
 import withStyles from '@material-ui/core/styles/withStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { SnackBarContext } from '../../contexts';
+
+import callApi from '../../lib/utils/api';
 
 import { SnackBarContext } from '../../contexts';
 import { LOGIN_USER } from './mutation';
@@ -158,7 +161,6 @@ class Login extends Component {
       isValid = (item) => {
         const { state } = this;
         const { touched } = state;
-
         if (touched[[item]] === false) {
           return false;
         }

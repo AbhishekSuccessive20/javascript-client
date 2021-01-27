@@ -236,7 +236,6 @@ class EditDialog extends Component {
                     </Button>
                   )
                 }
-
               </DialogActions>
             </Dialog>
           )
