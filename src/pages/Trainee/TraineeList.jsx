@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/react-hoc';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -10,6 +11,7 @@ import callApi from '../../lib/utils/api';
 import { limit } from '../../configs/constants';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 import { AddDialogue, EditDialog, RemoveDialog } from './components';
+import { GETALL_TRAINEE } from './query';
 
 class TraineeList extends React.Component {
   constructor(props) {
@@ -34,13 +36,14 @@ class TraineeList extends React.Component {
 
   getData = async () => {
     const header = localStorage.getItem('token');
+    const refetch = useQuery(GETALL_TRAINEE);
     const { page: statePage } = this.state;
     const params = {
       skip: statePage * limit,
       limit,
     };
     this.setState({ loader: true });
-    await callApi('/trainee', 'GET', {}, header, params)
+    await refetch(header, params)
       .then((data) => {
         this.setState({
           records: data.data.Trainees.data.records,
