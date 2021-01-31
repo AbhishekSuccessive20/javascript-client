@@ -63,7 +63,6 @@ function RemoveDialog(props) {
                   </Button>
                 )
               }
-
             </DialogActions>
           </Dialog>
         )

@@ -7,7 +7,6 @@ import ls from 'local-storage';
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { AuthRoute, PrivateRoute } from './routes';
-
 import { SnackBarProvider } from './contexts';
 
 import apolloclient from './lib/apollo-client';
@@ -29,5 +28,4 @@ function App() {
     </>
   );
 }
-
 export default App;
