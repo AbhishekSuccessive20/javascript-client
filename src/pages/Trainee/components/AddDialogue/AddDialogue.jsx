@@ -147,7 +147,7 @@ class AddDialogue extends Component {
       return this.hasErrors();
     }
 
-    onSubmit = async (event, openSnackBar) => {
+    /* onSubmit = async (event, openSnackBar) => {
       event.preventDefault();
       const { onSubmit } = this.props;
       const {
@@ -194,7 +194,7 @@ class AddDialogue extends Component {
           });
           openSnackBar(err.response.data.message, 'error');
         });
-    }
+    } */
 
     onClose = () => {
       this.props.open = false;
@@ -202,7 +202,7 @@ class AddDialogue extends Component {
 
     render() {
       const {
-        open, onClose,
+        open, onClose, onSubmit,
       } = this.props;
       const {
         id,

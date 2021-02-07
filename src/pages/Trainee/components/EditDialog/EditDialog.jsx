@@ -124,44 +124,6 @@ class EditDialog extends Component {
     return this.hasErrors();
   }
 
-  onSubmit = async (event, openSnackBar) => {
-    event.preventDefault();
-    const { onSubmit, details, onClose } = this.props;
-    const { name, email } = this.state;
-    const header = localStorage.getItem('token');
-    const { id } = details;
-    this.setState({ loader: true });
-    const dataToUpdate = {
-      name,
-      email,
-    };
-    if (name === details.name) {
-      delete dataToUpdate.name;
-    }
-    if (email === details.email) {
-      delete dataToUpdate.email;
-    }
-    await callApi('/trainee', 'PUT', { id, dataToUpdate }, header)
-      .then((res) => {
-        openSnackBar(res.data.message, 'success');
-        this.setState({
-          buttonEnable: false,
-          name: '',
-          email: '',
-          touched: {
-            name: false,
-            email: false,
-          },
-        });
-        onSubmit();
-      })
-      .catch((err) => {
-        openSnackBar(err.response.data.message, 'error');
-      });
-    onClose();
-    this.setState({ loader: false });
-  }
-
   render() {
     const { editOpen, onClose, details } = this.props;
     const { loader } = this.state;
@@ -229,7 +191,7 @@ class EditDialog extends Component {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={(event) => this.onSubmit(event, openSnackBar)}
+                      onClick={(event) => this.editOpen(event, openSnackBar)}
                       disabled={!(this.handleButtonError())}
                     >
                       Submit
@@ -250,12 +212,10 @@ EditDialog.propTypes = {
   details: PropTypes.objectOf(PropTypes.any).isRequired,
   onClose: PropTypes.func,
   editOpen: PropTypes.bool,
-  onSubmit: PropTypes.func,
 };
 
 EditDialog.defaultProps = {
   onClose: () => {},
-  onSubmit: () => {},
   editOpen: false,
 };
 

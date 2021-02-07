@@ -2,87 +2,109 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, CircularProgress,
+  Dialog, DialogActions, DialogContentText, DialogTitle, Button, CircularProgress,
 } from '@material-ui/core';
 
 import { SnackBarContext } from '../../../../contexts';
-import callApi from '../../../../lib/utils/api';
-import { date } from '../../../../configs/constants';
 
-function RemoveDialog(props) {
-  const [loader, setLoader] = useState(false);
-  const handleDeleteClose = (event, openSnackBar) => {
-    event.preventDefault();
-    const { details, onClose, onSubmit } = props;
-    const originalDate = new Date(details.createdAt);
-    const dateCheck = new Date(date);
-    setLoader(true);
-    if (originalDate > dateCheck) {
-      callApi(`/trainee/${details.id}`, 'DELETE', {}, localStorage.getItem('token'))
-        .then((res) => {
-          openSnackBar(res.data.message, 'success');
-          onSubmit();
-        })
-        .catch((err) => {
-          openSnackBar(err.response.data.message, 'error');
-        });
-    } else {
-      openSnackBar('Can\'t Delete!', 'error');
-    }
-    setLoader(false);
-    onClose();
-  };
+class RemoveDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      email: '',
+      message: '',
+      loading: false,
+    };
+  }
 
-  const { deleteOpen, onClose } = props;
+handleChange = (prop) => (event) => {
+  // eslint-disable-next-line no-console
+  this.setState({ [prop]: event.target.value }, () => console.log(this.state));
+};
+
+handleClose = () => {
+  this.setState({ open: false });
+};
+
+onClickHandler = async (Data, openSnackBar) => {
+  this.setState({
+    loading: true,
+  });
+  const { onSubmit } = this.props;
+  const { deleteTrainee, refetch } = this.props;
+  const { _id: id } = Data;
+  const response = await deleteTrainee({ variables: { id } });
+  this.setState({ loading: false });
+  if (response.data.deleteTrainee !== 'undefined') {
+    refetch();
+    this.setState({
+      message: 'Deleted Successfully ',
+    }, () => {
+      const { message } = this.state;
+      onSubmit(Data);
+      openSnackBar(message, 'success');
+    });
+  } else {
+    this.setState({
+      message: 'Error While Deleting',
+    }, () => {
+      const { message } = this.state;
+      openSnackBar(message, 'error');
+    });
+  }
+}
+
+render() {
+  const {
+    open, onClose, onSubmit, data,
+  } = this.props;
+  const { loading } = this.state;
   return (
-    <SnackBarContext.Consumer>
-      {
-        (openSnackBar) => (
-          <Dialog
-            open={deleteOpen}
-            onClose={onClose}
-          >
-            <DialogTitle>Remove Trainee</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Do you really want to remove trainee?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="primary">
-                Cancel
+    <Dialog
+      open={open}
+      onClose={() => this.handleClose()}
+      fullWidth
+      maxWidth="md"
+    >
+      <DialogTitle id="form-dialog-title">Remove Trainee</DialogTitle>
+      <DialogContentText style={{ marginLeft: 25 }}>
+        Do you really want to remove the trainee?
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Cancel
+          </Button>
+          <SnackBarContext.Consumer>
+            {({ openSnackBar }) => (
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  onSubmit({ data });
+                  this.onClickHandler(data, openSnackBar);
+                }}
+              >
+                {loading && (
+                  <CircularProgress size={15} />
+                )}
+                {loading && <span>Deleting</span>}
+                {!loading && <span>Delete</span>}
               </Button>
-              {
-                loader ? (
-                  <Button variant="contained" disabled>
-                    <CircularProgress size={20} />
-                  </Button>
-                ) : (
-                  <Button onClick={(event) => handleDeleteClose(event, openSnackBar)} color="primary" variant="contained">
-                    Delete
-                  </Button>
-                )
-              }
-
-            </DialogActions>
-          </Dialog>
-        )
-      }
-    </SnackBarContext.Consumer>
+            )}
+          </SnackBarContext.Consumer>
+        </DialogActions>
+      </DialogContentText>
+    </Dialog>
   );
+}
 }
 
 RemoveDialog.propTypes = {
-  details: PropTypes.objectOf(PropTypes.any).isRequired,
-  onClose: PropTypes.func,
-  onSubmit: PropTypes.func,
-  deleteOpen: PropTypes.bool,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  data: PropTypes.objectOf(PropTypes.string).isRequired,
+  deleteTrainee: PropTypes.func.isRequired,
+  refetch: PropTypes.func.isRequired,
 };
-
-RemoveDialog.defaultProps = {
-  onClose: () => {},
-  onSubmit: () => {},
-  deleteOpen: false,
-};
-
 export default RemoveDialog;

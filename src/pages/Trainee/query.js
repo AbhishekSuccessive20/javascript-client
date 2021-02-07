@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const GETALL_TRAINEE = gql`query GetallTrainee($skip: Int, $limit: Int) {
+const GETALL_TRAINEE = gql`query GetallTrainee($skip: String, $limit: String) {
   getAllTrainee(options: { skip: $skip, limit: $limit }) {
     message
     status
@@ -11,6 +11,7 @@ const GETALL_TRAINEE = gql`query GetallTrainee($skip: Int, $limit: Int) {
         name
         createdAt
         originalId
+        _id
       }
     }
   }
