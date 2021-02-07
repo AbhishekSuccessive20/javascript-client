@@ -75,5 +75,11 @@
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.1",
     "husky": "^4.3.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test",
+      "pre-push": "npm run lint && npm test"
+    }
   }
 }
